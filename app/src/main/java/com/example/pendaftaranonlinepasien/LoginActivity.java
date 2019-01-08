@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferenceUtils.getInstance(getApplicationContext()).setValue(response.body());
                     SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Email", email);
                     SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Password", password);
-                    SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Id", response.body().getId());
+                    SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Id", response.body().getObject().getIdUser());
                     SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Logined", true);
                     if (response.body().getObject() != null) {
                         SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Role", response.body().getObject().getRole());

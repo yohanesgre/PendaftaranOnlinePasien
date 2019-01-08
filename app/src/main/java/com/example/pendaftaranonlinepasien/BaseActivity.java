@@ -3,7 +3,6 @@ package com.example.pendaftaranonlinepasien;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,14 +10,18 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.example.pendaftaranonlinepasien.API.POJO.Pasien;
+import com.example.pendaftaranonlinepasien.API.POJO.UserObject;
 import com.example.pendaftaranonlinepasien.API.RetrofitClient;
 import com.example.pendaftaranonlinepasien.API.RetrofitInterface;
+import com.example.pendaftaranonlinepasien.Activities.Admin_Menu.ListPasienActivity;
 import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.DataPasienActivity;
 import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.RiwayatPasienActivity;
-import com.example.pendaftaranonlinepasien.Activities.Pendaftaran_Pasien.DaftarBerobatActivity;
+import com.example.pendaftaranonlinepasien.Activities.Pendaftaran_Pasien.DaftarKontrolActivity;
 import com.example.pendaftaranonlinepasien.Utils.SharedPreferenceUtils;
 
 import butterknife.BindView;
@@ -51,7 +54,11 @@ public class BaseActivity extends AppCompatActivity
         /*Fragment fragment = new DaftarKontrolFragmen();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.flContent, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();*/
-
+        UserObject<Pasien> user = SharedPreferenceUtils.getInstance(getApplicationContext()).getUserProfileValue();
+        if (user.getObject().getRole().equals("Admin")){
+            Menu menu = nvDrawer.getMenu();
+            menu.setGroupVisible(R.id.AdminMenu, true);
+        }
     }
 
     private ActionBarDrawerToggle setupDrawerToggle(){
@@ -92,8 +99,11 @@ public class BaseActivity extends AppCompatActivity
         } else if (id == R.id.nav_2) {
             startActivity(new Intent(getApplicationContext(), RiwayatPasienActivity.class));
         } else if (id == R.id.nav_3) {
-                startActivity(new Intent(getApplicationContext(), DaftarBerobatActivity.class));
-        } else if (id == R.id.nav_logout){
+                startActivity(new Intent(getApplicationContext(), DaftarKontrolActivity.class));
+        } else if(id == R.id.nav_4){
+            startActivity(new Intent(getApplicationContext(), ListPasienActivity.class));
+        }
+        else if (id == R.id.nav_logout){
             logout();
             finish();
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));

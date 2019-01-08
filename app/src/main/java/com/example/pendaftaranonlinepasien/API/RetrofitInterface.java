@@ -30,6 +30,10 @@ public interface RetrofitInterface {
     @GET("/api/user/{id}/riwayart")
     Call<UserList<Riwayat>> getRiwayatPasien (@Path("id") int idUser);
 
+    @POST("/api/user/search")
+    @FormUrlEncoded
+    Call<Pasien> SearchPasienByNIK (@Field("nik") String nik);
+
     @POST("/api/user/{id}/berobat")
     @FormUrlEncoded
     Call<ResponseBody> DaftarBerobat (@Path("id") int idUser, @Field("tgl") String tgl, @Field("poli") String poli, @Field("dokter") String dokter, @Field("jam") String jam);

@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.example.pendaftaranonlinepasien.API.POJO.Pasien;
 import com.example.pendaftaranonlinepasien.API.POJO.UserObject;
-import com.example.pendaftaranonlinepasien.Activities.Pendaftaran_Pasien.DaftarBerobatActivity;
 import com.example.pendaftaranonlinepasien.BaseActivity;
 import com.example.pendaftaranonlinepasien.R;
 import com.example.pendaftaranonlinepasien.Utils.SharedPreferenceUtils;
@@ -20,7 +19,6 @@ import com.example.pendaftaranonlinepasien.Utils.SharedPreferenceUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,7 +88,6 @@ public class DataPasienActivity extends BaseActivity {
                 }
                 dataPasien.setRole("Pasien");
                 updateDataPasien(dataPasien);
-                Toast.makeText(getBaseContext(), dataPasien.getNama(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -120,7 +117,6 @@ public class DataPasienActivity extends BaseActivity {
         viewHolder.etAlamat.setText(dataUser.getObject().getAlamat());
         viewHolder.etHP.setText(dataUser.getObject().getHp());
         viewHolder.etNamaIbu.setText(dataUser.getObject().getIbu());
-        Toast.makeText(getApplicationContext(), dataUser.getObject().getJK(), Toast.LENGTH_SHORT).show();
         if (dataUser.getObject().getJK().equals("L")){
             viewHolder.rgJK.check(R.id.rg_JK_Laki);
         }else if(dataUser.getObject().equals("P")){

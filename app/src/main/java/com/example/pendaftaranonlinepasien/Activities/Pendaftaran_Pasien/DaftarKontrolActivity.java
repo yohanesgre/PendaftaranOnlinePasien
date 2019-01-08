@@ -7,12 +7,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.text.InputType;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -23,10 +19,7 @@ import android.widget.Toast;
 
 import com.example.pendaftaranonlinepasien.API.POJO.Pasien;
 import com.example.pendaftaranonlinepasien.API.POJO.UserObject;
-import com.example.pendaftaranonlinepasien.API.RetrofitClient;
-import com.example.pendaftaranonlinepasien.API.RetrofitInterface;
 import com.example.pendaftaranonlinepasien.BaseActivity;
-import com.example.pendaftaranonlinepasien.Fragments.HasilReservasiFragment;
 import com.example.pendaftaranonlinepasien.R;
 import com.example.pendaftaranonlinepasien.Utils.SharedPreferenceUtils;
 
@@ -42,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DaftarBerobatActivity extends BaseActivity {
+public class DaftarKontrolActivity extends BaseActivity {
 
     public static ContentViewHolder viewHolder;
     UserObject<Pasien> user;
@@ -77,7 +70,7 @@ public class DaftarBerobatActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View contentView = getLayoutInflater().inflate(R.layout.activity_daftar_berobat, frameLayout, false);
+        View contentView = getLayoutInflater().inflate(R.layout.activity_daftar_kontrol, frameLayout, false);
         viewHolder = new ContentViewHolder(contentView);
         frameLayout.addView(contentView);
         nvDrawer.setCheckedItem(R.id.nav_3);
@@ -104,7 +97,7 @@ public class DaftarBerobatActivity extends BaseActivity {
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                 int minute = mcurrentTime.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(DaftarBerobatActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                mTimePicker = new TimePickerDialog(DaftarKontrolActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         viewHolder.etJam.setText( selectedHour + ":" + selectedMinute);
@@ -118,7 +111,7 @@ public class DaftarBerobatActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 daftarKontrol();
-                Intent intent = new Intent(DaftarBerobatActivity.this, HasilReservasiActivity.class);
+                Intent intent = new Intent(DaftarKontrolActivity.this, HasilReservasiActivity.class);
                 intent.putExtra("Tanggal", dateFull.toString());
                 intent.putExtra("Poli", viewHolder.spinnerPoli.getSelectedItem().toString());
                 intent.putExtra("Jam", viewHolder.etJam.getText().toString());
@@ -133,7 +126,7 @@ public class DaftarBerobatActivity extends BaseActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Toast.makeText(DaftarBerobatActivity.this, "Daftar kontrol berhasil!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DaftarKontrolActivity.this, "Daftar kontrol berhasil!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -197,7 +190,7 @@ public class DaftarBerobatActivity extends BaseActivity {
                 Toast.makeText(getActivity(), "selected date: " + dateFull,
                         Toast.LENGTH_SHORT).show();
                 setDateFull(dateFull);
-                DaftarBerobatActivity.viewHolder.etTanggalKontrol.setText(dateFull);
+                DaftarKontrolActivity.viewHolder.etTanggalKontrol.setText(dateFull);
             }
         };
 

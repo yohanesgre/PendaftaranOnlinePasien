@@ -7,7 +7,7 @@ public class Pasien{
     @SerializedName("id")
     int id;
     @SerializedName("id_user")
-    int idUser;
+    int id_user;
     @SerializedName("nama")
     String nama;
     @SerializedName("ttl")
@@ -35,7 +35,7 @@ public class Pasien{
      * ======================= Setter =============================
      */
     public void setIdUser(int idUser) {
-        this.idUser = idUser;
+        this.id_user = idUser;
     }
     public void setNama(String nama) {
         this.nama = nama;
@@ -76,7 +76,7 @@ public class Pasien{
         return id;
     }
     public int getIdUser() {
-        return idUser;
+        return id_user;
     }
     public String getNama() {
         return nama;

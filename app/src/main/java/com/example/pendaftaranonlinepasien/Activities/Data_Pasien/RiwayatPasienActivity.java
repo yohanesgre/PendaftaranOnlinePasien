@@ -1,5 +1,6 @@
 package com.example.pendaftaranonlinepasien.Activities.Data_Pasien;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -45,7 +46,6 @@ public class RiwayatPasienActivity extends BaseActivity {
     UserList<Riwayat> riwayatUser;
     ContentViewHolder viewHolder;
     List<DataTable> listDataTable = new ArrayList<>();
-    final RetrofitInterface retrofitInterface = RetrofitClient.getClient().create(RetrofitInterface.class);
     List<ColumnHeader> columnHeaderList = new ArrayList<>();
     List<RowHeader> rowHeaderList = new ArrayList<>();
     List<List<Cell>> cellList = new ArrayList<>();
@@ -69,7 +69,15 @@ public class RiwayatPasienActivity extends BaseActivity {
             viewHolder.tvNama.setText("Isi Profile terlebih dahulu!");
         }
         columnHeaderList = TableViewModel.getRiwayatColumnHeaderList();
-        initDataTable();
+        Intent intent = getIntent();
+        if (user.getObject().getRole().equals("Pasien")){
+            initDataTable(user.getObject().getIdUser());
+        }
+        else
+            if (intent.getIntExtra("Id",  0)== 0)
+                initDataTable(user.getObject().getIdUser());
+            else
+                initDataTable(intent.getIntExtra("Id",  0));
     }
 
     public class ContentViewHolder {
@@ -83,8 +91,8 @@ public class RiwayatPasienActivity extends BaseActivity {
         TableView mTableView;
 
         private TableViewModel mTableViewModel;
-
         public AbstractTableAdapter mTableViewAdapter;
+
         Unbinder unbinder;
 
         ContentViewHolder(View view) {
@@ -148,8 +156,8 @@ public class RiwayatPasienActivity extends BaseActivity {
         }
     }
 
-    private void initDataTable(){
-            Call<UserList<Riwayat>> call = retrofitInterface.getRiwayatPasien(SharedPreferenceUtils.getInstance(getApplicationContext()).getUserProfileValue().getId());
+    private void initDataTable(int idUser){
+            Call<UserList<Riwayat>> call = retrofitInterface.getRiwayatPasien(idUser);
             call.enqueue(new Callback<UserList<Riwayat>>() {
                 @Override
                 public void onResponse(Call<UserList<Riwayat>> call, Response<UserList<Riwayat>> response) {
@@ -158,13 +166,16 @@ public class RiwayatPasienActivity extends BaseActivity {
                             Riwayat riwayatPasien = response.body().getListObject().get(i);
                             String newTgl = DataFormatConverterUtils.getInstance(getBaseContext()).convertToFormated(riwayatPasien.getTgl());
                             riwayatPasien.setTgl(newTgl);
-                            listDataTable.add(new DataTable(i + 1, riwayatPasien.getTgl().toString(), riwayatPasien.getPoli()));
+                            listDataTable.add(new DataTable(i + 1, riwayatPasien.getTgl(), riwayatPasien.getPoli()));
                             }
                         if (listDataTable.size() > 0){
                             rowHeaderList = TableViewModel.getRiwayatRowHeaderList(listDataTable);
                             cellList = TableViewModel.getRiwayatCellList(listDataTable, columnHeaderList.size());
                             viewHolder.progressBar.setVisibility(View.GONE);
                             viewHolder.initializeTableView();
+                        }else {
+                            viewHolder.progressBar.setVisibility(View.GONE);
+                            Toast.makeText(RiwayatPasienActivity.this, "Pasien belum pernah berobat!", Toast.LENGTH_SHORT).show();
                         }
                     }
                     else {

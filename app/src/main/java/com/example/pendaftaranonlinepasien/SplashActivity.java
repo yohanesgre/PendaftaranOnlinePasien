@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
                                      public void onResponse(Call<UserObject<Pasien>> call, Response<UserObject<Pasien>> response) {
                                          if (response.isSuccessful()) {
                                              SharedPreferenceUtils.getInstance(getApplicationContext()).setValue(response.body());
-                                             SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Id", response.body().getId());
+                                             SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Id", response.body().getObject().getIdUser());
                                              SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Logined", true);
                                              if (response.body().getObject() != null) {
                                                  SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Role", response.body().getObject().getRole());

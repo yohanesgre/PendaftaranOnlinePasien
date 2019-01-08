@@ -7,7 +7,7 @@ public class Riwayat {
     @SerializedName("id")
     int id;
     @SerializedName("id_user")
-    int idUser;
+    int id_user;
     @SerializedName("tgl")
     String tgl;
     @SerializedName("poli")
@@ -30,7 +30,7 @@ public class Riwayat {
         return id;
     }
     public int getIdUser() {
-        return idUser;
+        return id_user;
     }
     public String getTgl() {
         return tgl;
@@ -59,7 +59,7 @@ public class Riwayat {
         this.id = id;
     }
     public void setIdUser(int idUser) {
-        this.idUser = idUser;
+        this.id_user = idUser;
     }
     public void setTgl(String tgl) {
         this.tgl = tgl;
