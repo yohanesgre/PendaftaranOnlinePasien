@@ -15,7 +15,7 @@ public class Pasien{
     @SerializedName("nik")
     String nik;
     @SerializedName("jk")
-    char JK;
+    String jk;
     @SerializedName("kerja")
     String kerja;
     @SerializedName("alamat")
@@ -46,8 +46,8 @@ public class Pasien{
     public void setNik(String nik) {
         this.nik = nik;
     }
-    public void setJK(char JK) {
-        this.JK = JK;
+    public void setJK(String jk) {
+        this.jk = jk;
     }
     public void setKerja(String kerja) {
         this.kerja = kerja;
@@ -87,8 +87,8 @@ public class Pasien{
     public String getNik() {
         return nik;
     }
-    public char getJK() {
-        return JK;
+    public String getJK() {
+        return jk;
     }
     public String getKerja() {
         return kerja;

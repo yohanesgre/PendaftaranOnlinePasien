@@ -17,14 +17,14 @@ public class HasilReservasiFragment extends Fragment {
     Context mContext;
     String date;
     String poli;
-    String dokter;
+    String jam;
 
     @BindView(R.id.tvTanggalBooking)
     TextView tvTanggalBooking;
     @BindView(R.id.tvPoli)
     TextView tvPoli;
-    @BindView(R.id.tvDokter)
-    TextView tvDokter;
+    @BindView(R.id.tvJam)
+    TextView tvJam;
 
 
     @Override
@@ -35,17 +35,17 @@ public class HasilReservasiFragment extends Fragment {
         Bundle arguments = getArguments();
         date = arguments.getString("Date");
         poli = arguments.getString("Poli");
-        dokter = arguments.getString("Dokter");
+        jam = arguments.getString("Jam");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_hasilreservasil, container, false);
+        final View view = inflater.inflate(R.layout.activity_hasil_reservasi, container, false);
         ButterKnife.bind(this, view);
         tvTanggalBooking.setText(date);
         tvPoli.setText(poli);
-        tvDokter.setText(dokter);
+        tvJam.setText(jam);
         return view;
     }
 }

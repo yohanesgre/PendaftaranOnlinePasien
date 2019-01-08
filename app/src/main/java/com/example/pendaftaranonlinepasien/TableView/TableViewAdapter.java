@@ -6,11 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
+import com.evrencoskun.tableview.sort.SortState;
 import com.example.pendaftaranonlinepasien.R;
 import com.example.pendaftaranonlinepasien.TableView.holder.CellViewHolder;
 import com.example.pendaftaranonlinepasien.TableView.holder.ColumnHeaderViewHolder;
 import com.example.pendaftaranonlinepasien.TableView.holder.RowHeaderViewHolder;
+import com.example.pendaftaranonlinepasien.TableView.model.Cell;
+import com.example.pendaftaranonlinepasien.TableView.model.ColumnHeader;
+import com.example.pendaftaranonlinepasien.TableView.model.RowHeader;
 
 public class TableViewAdapter extends AbstractTableAdapter<ColumnHeader, RowHeader, Cell> {
 
@@ -47,7 +52,7 @@ public class TableViewAdapter extends AbstractTableAdapter<ColumnHeader, RowHead
         View layout;
 
         switch (viewType) {
-            case MOOD_CELL_TYPE:
+            /*case MOOD_CELL_TYPE:
                 // Get image cell layout which has ImageView on the base instead of TextView.
                 layout = mInflater.inflate(R.layout.table_view_image_cell_layout, parent, false);
 
@@ -56,7 +61,7 @@ public class TableViewAdapter extends AbstractTableAdapter<ColumnHeader, RowHead
                 // Get image cell layout which has ImageView instead of TextView.
                 layout = mInflater.inflate(R.layout.table_view_image_cell_layout, parent, false);
 
-                return new GenderCellViewHolder(layout);
+                return new GenderCellViewHolder(layout);*/
             default:
                 // For cells that display a text
                 layout = mInflater.inflate(R.layout.table_view_cell_layout, parent, false);

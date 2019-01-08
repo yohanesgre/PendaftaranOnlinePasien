@@ -1,6 +1,7 @@
 package com.example.pendaftaranonlinepasien;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.pendaftaranonlinepasien.API.RetrofitClient;
 import com.example.pendaftaranonlinepasien.API.RetrofitInterface;
+import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.RiwayatPasienActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,6 +22,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
+
+    LoginActivity loginActivity = new LoginActivity();
 
     @BindView(R.id.input_email)
     EditText etEmail;
@@ -77,9 +81,8 @@ public class RegisterActivity extends AppCompatActivity {
                             public void run() {
                                 // On complete call either onSignupSuccess or onSignupFailed
                                 // depending on success
-                                daftarBerhasil();
-                                // onSignupFailed();
                                 progressDialog.dismiss();
+                                daftarBerhasil();
                             }
                         }, 3000);
             }
@@ -121,5 +124,10 @@ public class RegisterActivity extends AppCompatActivity {
     private void daftarGagal(){
         Toast.makeText(getBaseContext(), "Pendaftaran akun gagal! Ulangi lagi!", Toast.LENGTH_SHORT).show();
         btnSignup.setEnabled(true);
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
     }
 }

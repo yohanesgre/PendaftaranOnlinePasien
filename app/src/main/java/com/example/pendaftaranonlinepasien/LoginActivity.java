@@ -30,7 +30,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
-
+    boolean logined = false;
     @BindView(R.id.input_email)
     EditText etEmail;
     @BindView(R.id.input_password)
@@ -77,57 +77,43 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String email = etEmail.getText().toString();
-        String password = etPassword.getText().toString();
+        final String email = etEmail.getText().toString();
+        final String password = etPassword.getText().toString();
 
         // TODO: Implement your own authentication logic here.
         // Retrofit login
+        LoginRetrofit(email, password);
+    }
 
+    public void LoginRetrofit(final String email, final String password){
         Call<UserObject<Pasien>> call = retrofitInterface.loginAkun(email, password);
         call.enqueue(new Callback<UserObject<Pasien>>() {
             @Override
             public void onResponse(Call<UserObject<Pasien>> call, Response<UserObject<Pasien>> response) {
-                if (response.isSuccessful()){
-                    Gson gson = new Gson();
-                    String text = gson.toJson(response.body());
+                if (response.isSuccessful()) {
                     SharedPreferenceUtils.getInstance(getApplicationContext()).setValue(response.body());
+                    SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Email", email);
+                    SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Password", password);
                     SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Id", response.body().getId());
                     SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Logined", true);
-                    if (response.body().getObject() != null){
+                    if (response.body().getObject() != null) {
                         SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Role", response.body().getObject().getRole());
                     }
-                    new android.os.Handler().postDelayed(
-                            new Runnable() {
-                                public void run() {
-                                    // On complete call either onLoginSuccess or onLoginFailed
-                                    onLoginSuccess();
-                                    progressDialog.dismiss();
-                                }
-                            }, 3000);
-                } else {
-                    new android.os.Handler().postDelayed(
-                            new Runnable() {
-                                public void run() {
-                                    // On complete call either onLoginSuccess or onLoginFailed
-                                    onLoginFailed();
-                                    progressDialog.dismiss();
-                                }
-                            }, 3000);
+                    progressDialog.dismiss();
+                    btnLogin.setEnabled(true);
+                    onLoginSuccess();
+                    Intent mAIntent = new Intent(LoginActivity.this, RiwayatPasienActivity.class);
+                    startActivity(mAIntent);
                 }
             }
 
             @Override
             public void onFailure(Call<UserObject<Pasien>> call, final Throwable t) {
-                new android.os.Handler().postDelayed(
-                        new Runnable() {
-                            public void run() {
-                                // On complete call either onLoginSuccess or onLoginFailed
-                                //onLoginSuccess();
-                                Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-                                btnLogin.setEnabled(true);
-                                progressDialog.dismiss();
-                            }
-                        }, 3000);
+                logined = false;
+//                Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+                btnLogin.setEnabled(true);
             }
         });
     }
@@ -139,14 +125,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess() {
-        btnLogin.setEnabled(true);
-        Toast.makeText(LoginActivity.this, "Login successed", Toast.LENGTH_SHORT).show();
-        Intent mAIntent = new Intent(LoginActivity.this, RiwayatPasienActivity.class);
-        startActivity(mAIntent);
+        Toast.makeText(getBaseContext(), "Login successed", Toast.LENGTH_SHORT).show();
     }
 
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-        btnLogin.setEnabled(true);
     }
 }

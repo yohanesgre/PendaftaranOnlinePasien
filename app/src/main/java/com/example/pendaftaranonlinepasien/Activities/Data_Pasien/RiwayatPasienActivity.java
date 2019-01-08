@@ -1,18 +1,17 @@
 package com.example.pendaftaranonlinepasien.Activities.Data_Pasien;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
-import android.support.v4.view.GravityCompat;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.evrencoskun.tableview.TableView;
+import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 import com.example.pendaftaranonlinepasien.API.POJO.Pasien;
 import com.example.pendaftaranonlinepasien.API.POJO.Riwayat;
 import com.example.pendaftaranonlinepasien.API.POJO.UserList;
@@ -21,6 +20,12 @@ import com.example.pendaftaranonlinepasien.API.RetrofitClient;
 import com.example.pendaftaranonlinepasien.API.RetrofitInterface;
 import com.example.pendaftaranonlinepasien.BaseActivity;
 import com.example.pendaftaranonlinepasien.R;
+import com.example.pendaftaranonlinepasien.TableView.TableViewAdapter;
+import com.example.pendaftaranonlinepasien.TableView.TableViewListener;
+import com.example.pendaftaranonlinepasien.TableView.TableViewModel;
+import com.example.pendaftaranonlinepasien.TableView.model.Cell;
+import com.example.pendaftaranonlinepasien.TableView.model.ColumnHeader;
+import com.example.pendaftaranonlinepasien.TableView.model.RowHeader;
 import com.example.pendaftaranonlinepasien.Utils.DataFormatConverterUtils;
 import com.example.pendaftaranonlinepasien.Utils.SharedPreferenceUtils;
 
@@ -30,12 +35,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import de.codecrafters.tableview.TableDataAdapter;
-import de.codecrafters.tableview.TableView;
-import de.codecrafters.tableview.listeners.TableDataClickListener;
-import de.codecrafters.tableview.model.TableColumnWeightModel;
-import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
-import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,7 +46,10 @@ public class RiwayatPasienActivity extends BaseActivity {
     ContentViewHolder viewHolder;
     List<DataTable> listDataTable = new ArrayList<>();
     final RetrofitInterface retrofitInterface = RetrofitClient.getClient().create(RetrofitInterface.class);
-    static String[] riwayatPasienHeader={"No","Tangal Periksa","Poli"};
+    List<ColumnHeader> columnHeaderList = new ArrayList<>();
+    List<RowHeader> rowHeaderList = new ArrayList<>();
+    List<List<Cell>> cellList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,8 @@ public class RiwayatPasienActivity extends BaseActivity {
         viewHolder = new ContentViewHolder(contentView);
         frameLayout.addView(contentView);
         nvDrawer.setCheckedItem(R.id.nav_2);
-        mToolbar.setTitle("Riwayat Pasien");
+        //mToolbar.setTitle("Riwayat Pasien");
+        viewHolder.progressBar.setVisibility(View.VISIBLE);
         user = SharedPreferenceUtils.getInstance(getApplicationContext()).getUserProfileValue();
         if (user.getObject()!=null){
             viewHolder.tvNoRM.setText(Integer.toString(user.getObject().getIdUser()));
@@ -65,16 +68,23 @@ public class RiwayatPasienActivity extends BaseActivity {
             viewHolder.tvNoRM.setText("Isi Profile terlebih dahulu!");
             viewHolder.tvNama.setText("Isi Profile terlebih dahulu!");
         }
+        columnHeaderList = TableViewModel.getRiwayatColumnHeaderList();
         initDataTable();
     }
 
     public class ContentViewHolder {
+        @BindView(R.id.pBar)
+        public ProgressBar progressBar;
         @BindView(R.id.tvNoRM)
         TextView tvNoRM;
         @BindView(R.id.tvNama)
         TextView tvNama;
-        @BindView(R.id.tableView_RiwayatPeriksa)
-        TableView<DataTable> tableDataView;
+        @BindView(R.id.tableView_Riwayat)
+        TableView mTableView;
+
+        private TableViewModel mTableViewModel;
+
+        public AbstractTableAdapter mTableViewAdapter;
         Unbinder unbinder;
 
         ContentViewHolder(View view) {
@@ -82,6 +92,37 @@ public class RiwayatPasienActivity extends BaseActivity {
         }
         protected void unbindButterKnife() {
             unbinder.unbind();
+        }
+
+        public void initializeTableView() {
+            // Create TableView View model class  to group view models of TableView
+            mTableViewModel = new TableViewModel(getApplicationContext());
+
+            // Create TableView Adapter
+            mTableViewAdapter = new TableViewAdapter(getApplicationContext(), mTableViewModel);
+
+            mTableView.setAdapter(mTableViewAdapter);
+            mTableView.setTableViewListener(new TableViewListener(mTableView));
+
+            // Create an instance of a Filter and pass the TableView.
+            //mTableFilter = new Filter(mTableView);
+
+            // Load the dummy data to the TableView
+            mTableViewAdapter.setAllItems(columnHeaderList, rowHeaderList, cellList);
+
+            //mTableView.setHasFixedWidth(true);
+
+        /*for (int i = 0; i < mTableViewModel.getCellList().size(); i++) {
+            mTableView.setColumnWidth(i, 200);
+        }*)
+
+        //mTableView.setColumnWidth(0, -2);
+        //mTableView.setColumnWidth(1, -2);
+
+        /*mTableView.setColumnWidth(2, 200);
+        mTableView.setColumnWidth(3, 300);
+        mTableView.setColumnWidth(4, 400);
+        mTableView.setColumnWidth(5, 500);*/
         }
     }
 
@@ -95,6 +136,16 @@ public class RiwayatPasienActivity extends BaseActivity {
             this.tgl = tgl;
             this.poli = poli;
         }
+
+        public String getPoli() {
+            return poli;
+        }
+        public String getTgl() {
+            return tgl;
+        }
+        public int getNo() {
+            return no;
+        }
     }
 
     private void initDataTable(){
@@ -107,10 +158,14 @@ public class RiwayatPasienActivity extends BaseActivity {
                             Riwayat riwayatPasien = response.body().getListObject().get(i);
                             String newTgl = DataFormatConverterUtils.getInstance(getBaseContext()).convertToFormated(riwayatPasien.getTgl());
                             riwayatPasien.setTgl(newTgl);
-                            listDataTable.add(new DataTable(i + 1, riwayatPasien.getTgl(), riwayatPasien.getPoli()));
+                            listDataTable.add(new DataTable(i + 1, riwayatPasien.getTgl().toString(), riwayatPasien.getPoli()));
+                            }
+                        if (listDataTable.size() > 0){
+                            rowHeaderList = TableViewModel.getRiwayatRowHeaderList(listDataTable);
+                            cellList = TableViewModel.getRiwayatCellList(listDataTable, columnHeaderList.size());
+                            viewHolder.progressBar.setVisibility(View.GONE);
+                            viewHolder.initializeTableView();
                         }
-                        if (!listDataTable.isEmpty())
-                            initTableView();
                     }
                     else {
                         Toast.makeText(RiwayatPasienActivity.this, "Pasien belum pernah berobat!", Toast.LENGTH_SHORT).show();
@@ -123,12 +178,7 @@ public class RiwayatPasienActivity extends BaseActivity {
                 }
             });
     }
-
-    private void initTableView(){
-
-    }
-
-
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -143,12 +193,13 @@ public class RiwayatPasienActivity extends BaseActivity {
             case R.id.refresh:
                 listDataTable.clear();
                 initDataTable();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
+*/
     @Override
     public void onBackPressed() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {

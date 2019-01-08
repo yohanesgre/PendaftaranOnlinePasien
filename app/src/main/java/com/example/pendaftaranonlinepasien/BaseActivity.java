@@ -14,8 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.example.pendaftaranonlinepasien.API.RetrofitClient;
+import com.example.pendaftaranonlinepasien.API.RetrofitInterface;
 import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.DataPasienActivity;
 import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.RiwayatPasienActivity;
+import com.example.pendaftaranonlinepasien.Activities.Pendaftaran_Pasien.DaftarBerobatActivity;
 import com.example.pendaftaranonlinepasien.Utils.SharedPreferenceUtils;
 
 import butterknife.BindView;
@@ -30,6 +33,7 @@ public class BaseActivity extends AppCompatActivity
     @BindView(R.id.flContent) protected FrameLayout frameLayout;
 
     private ActionBarDrawerToggle drawerToggle;
+    public RetrofitInterface retrofitInterface = RetrofitClient.getClient().create(RetrofitInterface.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,8 @@ public class BaseActivity extends AppCompatActivity
            startActivity(new Intent(getApplicationContext(), DataPasienActivity.class));
         } else if (id == R.id.nav_2) {
             startActivity(new Intent(getApplicationContext(), RiwayatPasienActivity.class));
+        } else if (id == R.id.nav_3) {
+                startActivity(new Intent(getApplicationContext(), DaftarBerobatActivity.class));
         } else if (id == R.id.nav_logout){
             logout();
             finish();

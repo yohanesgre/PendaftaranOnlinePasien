@@ -11,5 +11,19 @@
     <string name="tvTanggalKontrol">Tanggal Kontrol</string>
     <string name="tvPenjamin">Penjamin</string>
     <string name="tvPoli">Poli</string>
-    <string name="tvDokter">Dokter</string>
+    <string name="tvJam">Pukul</string>
+
+    <string name="penjamin_prompt">Pilih penjamin</string>
+    <string name="poli_prompt">Pilih poli</string>
+
+    <string-array name="poli_arrays">
+        <item>Poli Gigi</item>
+        <item>Poli Umum</item>
+        <item>Poli KIA</item>
+    </string-array>
+
+    <string-array name="penjamin_arrays">
+        <item>BPJS</item>
+        <item>Umum</item>
+    </string-array>
 </resources>

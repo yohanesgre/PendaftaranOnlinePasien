@@ -30,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DaftarKontrolFragmen extends Fragment{
-
+/*
     DialogFragment newFragment;
     static String dateFull;
     String poli;
@@ -137,66 +137,5 @@ public class DaftarKontrolFragmen extends Fragment{
         dateFull = date;
     }
 
-    /**
-     * TODO: Class DatePickerFragment
-     */
-    public static class DatePickerFragment extends DialogFragment {
-        final Calendar c = Calendar.getInstance();
-        String dateFull;
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState){
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(), dateSetListener, year, month, day);
-            dialog.getDatePicker().setMinDate(c.getTimeInMillis());
-            return dialog;
-        }
-
-        private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                SimpleDateFormat formatFull = new SimpleDateFormat("dd / MM / yyyy");
-                SimpleDateFormat formatDay = new SimpleDateFormat("EEEE");
-                Date date = c.getTime();
-                String dateResult = formatFull.format(date);
-                String dayOfWeek = dayTranslate(formatDay.format(date));
-                dateFull = dayOfWeek + ", " + dateResult;
-                Toast.makeText(getActivity(), "selected date: " + dateFull,
-                        Toast.LENGTH_SHORT).show();
-                setDateFull(dateFull);
-                etTanggal.setText(dateFull);
-            }
-        };
-
-        private String dayTranslate(String day){
-            String result = null;
-            switch (day){
-                case "Monday":
-                    result = "Senin";
-                    break;
-                case "Tuesday":
-                    result = "Selasa";
-                    break;
-                case "Wednesday":
-                    result = "Wednesday";
-                    break;
-                case "Thursday":
-                    result = "Kamis";
-                    break;
-                case "Friday":
-                    result = "Jumat";
-                    break;
-                case "Saturday":
-                    result = "Sabtu";
-                    break;
-                case "Sunday":
-                    result = "Minggu";
-                    break;
-            }
-            return result;
-        }
-    }
+    */
 }

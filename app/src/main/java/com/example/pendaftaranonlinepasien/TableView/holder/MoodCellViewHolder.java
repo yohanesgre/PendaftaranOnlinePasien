@@ -18,38 +18,33 @@
 package com.example.pendaftaranonlinepasien.TableView.holder;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
 import com.example.pendaftaranonlinepasien.R;
-import com.example.pendaftaranonlinepasien.TableView.model.Cell;
 
 /**
- * Created by evrencoskun on 23/10/2017.
+ * Created by evrencoskun on 4.02.2018.
  */
 
-public class CellViewHolder extends AbstractViewHolder {
+public class MoodCellViewHolder extends AbstractViewHolder {
 
-    public final TextView cell_textview;
     public final LinearLayout cell_container;
-    private Cell cell;
+    public final ImageView cell_image;
 
-    public CellViewHolder(View itemView) {
+    public MoodCellViewHolder(View itemView) {
         super(itemView);
-        cell_textview = (TextView) itemView.findViewById(R.id.cell_data);
         cell_container = (LinearLayout) itemView.findViewById(R.id.cell_container);
+        cell_image = (ImageView) itemView.findViewById(R.id.cell_image);
     }
 
-    public void setCell(Cell cell) {
-        this.cell = cell;
-        cell_textview.setText(String.valueOf(cell.getData()));
 
-        // If your TableView should have auto resize for cells & columns.
-        // Then you should consider the below lines. Otherwise, you can ignore them.
+    public void setData(Object data) {
+        int mood = (int) data;
+   //     Drawable moodDrawable = ContextCompat.getDrawable(itemView.getContext(), mood ==
+     //           TableViewModel.HAPPY ? R.drawable.ic_happy : R.drawable.ic_sad);
 
-        // It is necessary to remeasure itself.
-        cell_container.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        cell_textview.requestLayout();
+       // cell_image.setImageDrawable(moodDrawable);
     }
 }

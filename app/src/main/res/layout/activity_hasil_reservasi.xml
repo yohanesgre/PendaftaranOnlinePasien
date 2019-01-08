@@ -50,11 +50,11 @@
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:fontFamily="@font/open_sans_bold"
-        android:text="@string/tvDokter"
+        android:text="@string/tvJam"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="15dp"/>
     <TextView
-        android:id="@+id/tvDokter"
+        android:id="@+id/tvJam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18dp"

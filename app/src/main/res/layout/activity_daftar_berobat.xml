@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/open_sans_bold"
+        android:text="Pendaftaran Kontrol"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvNamaPasien"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans_bold"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="35dp"
+        android:text="Nama Pasien: "
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/tvTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <EditText
+        android:id="@+id/etNamaPasien"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:fontFamily="@font/open_sans"
+        android:inputType="textPersonName"
+        android:selectAllOnFocus="false"
+        android:singleLine="false"
+        android:textSize="12sp"
+        android:editable="false"
+        app:layout_constraintBottom_toBottomOf="@id/tvNamaPasien"
+        app:layout_constraintStart_toEndOf="@id/tvTglKontrol"
+        app:layout_constraintTop_toTopOf="@+id/tvNamaPasien" />
+
+    <TextView
+        android:id="@+id/tvTglKontrol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans_bold"
+        android:layout_marginTop="35dp"
+        android:text="Tanggal Kontrol: "
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/tvNamaPasien"
+        app:layout_constraintTop_toBottomOf="@id/tvNamaPasien" />
+
+    <EditText
+        android:id="@+id/etTglKontrol"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans"
+        android:hint="dd/mm/yyyy"
+        android:selectAllOnFocus="false"
+        android:singleLine="false"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvTglKontrol"
+        app:layout_constraintStart_toStartOf="@id/etNamaPasien"
+        app:layout_constraintTop_toTopOf="@+id/tvTglKontrol" />
+
+    <TextView
+        android:id="@+id/tvPenjamin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans_bold"
+        android:layout_marginTop="35dp"
+        android:text="Penjamin: "
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/tvTglKontrol"
+        app:layout_constraintTop_toBottomOf="@id/tvTglKontrol" />
+
+    <Spinner
+        android:id="@+id/spinner_Penjamin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/penjamin_arrays"
+        android:prompt="@string/penjamin_prompt"
+        app:layout_constraintBottom_toBottomOf="@id/tvPenjamin"
+        app:layout_constraintStart_toStartOf="@id/etTglKontrol"
+        app:layout_constraintTop_toTopOf="@+id/tvPenjamin" />
+
+    <TextView
+        android:id="@+id/tvPoli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans_bold"
+        android:layout_marginTop="35dp"
+        android:text="Poli: "
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/tvPenjamin"
+        app:layout_constraintTop_toBottomOf="@id/tvPenjamin" />
+
+    <Spinner
+        android:id="@+id/spinner_Poli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:prompt="@string/poli_prompt"
+        android:entries="@array/poli_arrays"
+        app:layout_constraintBottom_toBottomOf="@id/tvPoli"
+        app:layout_constraintStart_toStartOf="@id/etTglKontrol"
+        app:layout_constraintTop_toTopOf="@+id/tvPoli" />
+
+    <TextView
+        android:id="@+id/tvJam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans_bold"
+        android:layout_marginTop="35dp"
+        android:text="Pukul: "
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/tvPoli"
+        app:layout_constraintTop_toBottomOf="@id/tvPoli" />
+
+    <EditText
+        android:id="@+id/etJam"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans"
+        android:selectAllOnFocus="false"
+        android:singleLine="false"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvJam"
+        app:layout_constraintStart_toStartOf="@id/etTglKontrol"
+        app:layout_constraintTop_toTopOf="@+id/tvJam" />
+
+    <Button
+        android:id="@+id/btn_Daftar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="50dp"
+        android:fontFamily="@font/open_sans"
+        android:text="Daftar"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etJam" />
+</android.support.constraint.ConstraintLayout>

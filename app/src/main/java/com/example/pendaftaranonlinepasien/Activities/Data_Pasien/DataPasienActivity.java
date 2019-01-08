@@ -6,54 +6,30 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.pendaftaranonlinepasien.API.POJO.Pasien;
+import com.example.pendaftaranonlinepasien.API.POJO.UserObject;
+import com.example.pendaftaranonlinepasien.Activities.Pendaftaran_Pasien.DaftarBerobatActivity;
 import com.example.pendaftaranonlinepasien.BaseActivity;
 import com.example.pendaftaranonlinepasien.R;
+import com.example.pendaftaranonlinepasien.Utils.SharedPreferenceUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DataPasienActivity extends BaseActivity {
 
     Pasien dataPasien;
+    UserObject<Pasien> dataUser;
     ContentViewHolder viewHolder;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        View contentView = getLayoutInflater().inflate(R.layout.activity_data_pasien, frameLayout, false);
-        viewHolder = new ContentViewHolder(contentView);
-        frameLayout.addView(contentView);
-        nvDrawer.setCheckedItem(R.id.nav_1);
-        viewHolder.btnUpdatePasien.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dataPasien = new Pasien();
-                dataPasien.setNama(viewHolder.etNamaPasien.getText().toString());
-                dataPasien.setTtl(viewHolder.etTTL.getText().toString());
-                dataPasien.setNik(viewHolder.etNIK.getText().toString());
-                dataPasien.setKerja(viewHolder.etKerja.getText().toString());
-                dataPasien.setAlamat(viewHolder.etAlamat.getText().toString());
-                dataPasien.setHp(viewHolder.etHP.getText().toString());
-                dataPasien.setIbu(viewHolder.etNamaIbu.getText().toString());
-                switch (viewHolder.rgJK.getCheckedRadioButtonId()){
-                    case 0:
-                        dataPasien.setJK('L');
-                        Toast.makeText(getBaseContext(), Integer.toString(viewHolder.rgJK.getCheckedRadioButtonId()) + " L", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1:
-                        dataPasien.setJK('P');
-                        Toast.makeText(getBaseContext(), Integer.toString(viewHolder.rgJK.getCheckedRadioButtonId()) + " P", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-                Toast.makeText(getBaseContext(), dataPasien.getNama(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     protected class ContentViewHolder{
         @BindView(R.id.etNamaPasien)
@@ -72,6 +48,10 @@ public class DataPasienActivity extends BaseActivity {
         EditText etNamaIbu;
         @BindView(R.id.rg_JK)
         RadioGroup rgJK;
+        @BindView(R.id.rg_JK_Laki)
+        RadioButton rbLK;
+        @BindView(R.id.rg_JK_Perempuan)
+        RadioButton rbP;
         @BindView(R.id.btn_Update_Pasien)
         Button btnUpdatePasien;
 
@@ -81,6 +61,70 @@ public class DataPasienActivity extends BaseActivity {
         }
         protected void unbindButterKnife(){
             unbinder.unbind();
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        View contentView = getLayoutInflater().inflate(R.layout.activity_data_pasien, frameLayout, false);
+        viewHolder = new ContentViewHolder(contentView);
+        initDataPasien();
+        frameLayout.addView(contentView);
+        nvDrawer.setCheckedItem(R.id.nav_1);
+        viewHolder.btnUpdatePasien.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dataPasien = new Pasien();
+                dataPasien.setNama(viewHolder.etNamaPasien.getText().toString());
+                dataPasien.setTtl(viewHolder.etTTL.getText().toString());
+                dataPasien.setNik(viewHolder.etNIK.getText().toString());
+                dataPasien.setKerja(viewHolder.etKerja.getText().toString());
+                dataPasien.setAlamat(viewHolder.etAlamat.getText().toString());
+                dataPasien.setHp(viewHolder.etHP.getText().toString());
+                dataPasien.setIbu(viewHolder.etNamaIbu.getText().toString());
+                if (viewHolder.rgJK.getCheckedRadioButtonId() == R.id.rg_JK_Laki){
+                    dataPasien.setJK("L");
+                }else if (viewHolder.rgJK.getCheckedRadioButtonId() == R.id.rg_JK_Perempuan){
+                    dataPasien.setJK("P");
+                }
+                dataPasien.setRole("Pasien");
+                updateDataPasien(dataPasien);
+                Toast.makeText(getBaseContext(), dataPasien.getNama(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateDataPasien(Pasien dataPasien_){
+        Call<UserObject<Pasien>> call = retrofitInterface.UpdateDataPasien(SharedPreferenceUtils.getInstance(getApplicationContext()).getUserProfileValue().getId(), dataPasien_);
+        call.enqueue(new Callback<UserObject<Pasien>>() {
+            @Override
+            public void onResponse(Call<UserObject<Pasien>> call, Response<UserObject<Pasien>> response) {
+                SharedPreferenceUtils.getInstance(getApplicationContext()).setValue(response.body());
+                Toast.makeText(DataPasienActivity.this, "Update Data Pasien berhasil!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<UserObject<Pasien>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initDataPasien(){
+        dataUser = SharedPreferenceUtils.getInstance(getApplicationContext()).getUserProfileValue();
+        viewHolder.etNamaPasien.setText(dataUser.getObject().getNama());
+        viewHolder.etTTL.setText(dataUser.getObject().getTtl());
+        viewHolder.etNIK.setText(dataUser.getObject().getNik());
+        viewHolder.etKerja.setText(dataUser.getObject().getKerja());
+        viewHolder.etAlamat.setText(dataUser.getObject().getAlamat());
+        viewHolder.etHP.setText(dataUser.getObject().getHp());
+        viewHolder.etNamaIbu.setText(dataUser.getObject().getIbu());
+        Toast.makeText(getApplicationContext(), dataUser.getObject().getJK(), Toast.LENGTH_SHORT).show();
+        if (dataUser.getObject().getJK().equals("L")){
+            viewHolder.rgJK.check(R.id.rg_JK_Laki);
+        }else if(dataUser.getObject().equals("P")){
+            viewHolder.rgJK.check(R.id.rg_JK_Perempuan);
         }
     }
 
