@@ -1,10 +1,14 @@
 package com.example.pendaftaranonlinepasien;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,40 +45,39 @@ public class LoginActivity extends AppCompatActivity {
     TextView linkRegister;
     ProgressDialog progressDialog;
     final RetrofitInterface retrofitInterface = RetrofitClient.getClient().create(RetrofitInterface.class);
+
+    Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        mContext = getApplicationContext();
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 login();
             }
         });
-
         linkRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                Intent intent = new Intent(mContext, RegisterActivity.class);
                 startActivity(intent);
             }
         });
-
-         /*
-            Post UserObject Register to Server
-         */
     }
     public void login() {
         Log.d(TAG, "Login");
 
         btnLogin.setEnabled(false);
 
-        progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
+        progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setMessage("Authenticating...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.getWindow().setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL);
+        progressDialog.setContentView(R.layout.progressbar_dialog);
         progressDialog.show();
 
         final String email = etEmail.getText().toString();
@@ -91,13 +94,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserObject<Pasien>> call, Response<UserObject<Pasien>> response) {
                 if (response.isSuccessful()) {
-                    SharedPreferenceUtils.getInstance(getApplicationContext()).setValue(response.body());
-                    SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Email", email);
-                    SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Password", password);
-                    SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Id", response.body().getObject().getIdUser());
-                    SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Logined", true);
+                    SharedPreferenceUtils.getInstance(mContext).setValue(response.body());
+                    SharedPreferenceUtils.getInstance(mContext).setValue("Email", email);
+                    SharedPreferenceUtils.getInstance(mContext).setValue("Password", password);
+                    SharedPreferenceUtils.getInstance(mContext).setValue("Id", response.body().getId());
+                    SharedPreferenceUtils.getInstance(mContext).setValue("Logined", true);
                     if (response.body().getObject() != null) {
-                        SharedPreferenceUtils.getInstance(getApplicationContext()).setValue("Role", response.body().getObject().getRole());
+                        SharedPreferenceUtils.getInstance(mContext).setValue("Role", response.body().getObject().getRole());
                     }
                     progressDialog.dismiss();
                     btnLogin.setEnabled(true);

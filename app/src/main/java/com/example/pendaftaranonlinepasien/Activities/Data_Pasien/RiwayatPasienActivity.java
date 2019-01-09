@@ -42,15 +42,13 @@ import retrofit2.Response;
 
 public class RiwayatPasienActivity extends BaseActivity {
 
-    UserObject<Pasien> user;
-    UserList<Riwayat> riwayatUser;
     ContentViewHolder viewHolder;
+    /** -------------- Table Properties ------------------*/
     List<DataTable> listDataTable = new ArrayList<>();
     List<ColumnHeader> columnHeaderList = new ArrayList<>();
     List<RowHeader> rowHeaderList = new ArrayList<>();
     List<List<Cell>> cellList = new ArrayList<>();
-
-
+    /** ------------------------------------------------- */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,10 +56,10 @@ public class RiwayatPasienActivity extends BaseActivity {
         viewHolder = new ContentViewHolder(contentView);
         frameLayout.addView(contentView);
         nvDrawer.setCheckedItem(R.id.nav_2);
-        //mToolbar.setTitle("Riwayat Pasien");
+        mToolbar.setTitle("Riwayat Pasien");
+
         viewHolder.progressBar.setVisibility(View.VISIBLE);
-        user = SharedPreferenceUtils.getInstance(getApplicationContext()).getUserProfileValue();
-        if (user.getObject()!=null){
+        if (user.getObject() != null){
             viewHolder.tvNoRM.setText(Integer.toString(user.getObject().getIdUser()));
             viewHolder.tvNama.setText(user.getObject().getNama());
         } else {
@@ -70,14 +68,18 @@ public class RiwayatPasienActivity extends BaseActivity {
         }
         columnHeaderList = TableViewModel.getRiwayatColumnHeaderList();
         Intent intent = getIntent();
-        if (user.getObject().getRole().equals("Pasien")){
-            initDataTable(user.getObject().getIdUser());
-        }
-        else
+        if (user.getObject() != null){
+            if (user.getObject().getRole().equals("Pasien"))
+                initDataTable(user.getObject().getIdUser());
+            else
             if (intent.getIntExtra("Id",  0)== 0)
                 initDataTable(user.getObject().getIdUser());
             else
                 initDataTable(intent.getIntExtra("Id",  0));
+        }else{
+            viewHolder.progressBar.setVisibility(View.GONE);
+            Toast.makeText(appContext, "Biodata belum terisi, isi profile terlebih dahulu!", Toast.LENGTH_LONG).show();
+        }
     }
 
     public class ContentViewHolder {
@@ -104,10 +106,10 @@ public class RiwayatPasienActivity extends BaseActivity {
 
         public void initializeTableView() {
             // Create TableView View model class  to group view models of TableView
-            mTableViewModel = new TableViewModel(getApplicationContext());
+            mTableViewModel = new TableViewModel(appContext);
 
             // Create TableView Adapter
-            mTableViewAdapter = new TableViewAdapter(getApplicationContext(), mTableViewModel);
+            mTableViewAdapter = new TableViewAdapter(appContext, mTableViewModel);
 
             mTableView.setAdapter(mTableViewAdapter);
             mTableView.setTableViewListener(new TableViewListener(mTableView));
@@ -179,38 +181,19 @@ public class RiwayatPasienActivity extends BaseActivity {
                         }
                     }
                     else {
+                        viewHolder.progressBar.setVisibility(View.GONE);
                         Toast.makeText(RiwayatPasienActivity.this, "Pasien belum pernah berobat!", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<UserList<Riwayat>> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_SHORT).show();
+                    viewHolder.progressBar.setVisibility(View.GONE);
+                    Toast.makeText(appContext, t.toString(), Toast.LENGTH_SHORT).show();
                 }
             });
     }
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_riwayat_pasien, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.refresh:
-                listDataTable.clear();
-                initDataTable();
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-*/
     @Override
     public void onBackPressed() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {

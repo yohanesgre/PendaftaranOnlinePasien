@@ -1,9 +1,11 @@
 package com.example.pendaftaranonlinepasien;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,13 +37,14 @@ public class RegisterActivity extends AppCompatActivity {
     TextView tvLogin;
 
     final RetrofitInterface retrofitInterface = RetrofitClient.getClient().create(RetrofitInterface.class);
-
+    Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
+        mContext=getApplicationContext();
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,9 +67,10 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         btnSignup.setEnabled(true);
-        final ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this, R.style.AppTheme);
+        final ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Membuat akun...");
+        progressDialog.getWindow().setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL);
+        progressDialog.setContentView(R.layout.progressbar_dialog);
         progressDialog.show();
 
         /*

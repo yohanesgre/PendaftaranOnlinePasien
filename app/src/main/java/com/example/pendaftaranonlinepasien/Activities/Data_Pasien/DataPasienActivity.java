@@ -67,9 +67,13 @@ public class DataPasienActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         View contentView = getLayoutInflater().inflate(R.layout.activity_data_pasien, frameLayout, false);
         viewHolder = new ContentViewHolder(contentView);
-        initDataPasien();
         frameLayout.addView(contentView);
         nvDrawer.setCheckedItem(R.id.nav_1);
+        initDataPasien();
+        initButtonListener();
+    }
+
+    private void initButtonListener(){
         viewHolder.btnUpdatePasien.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,10 +85,13 @@ public class DataPasienActivity extends BaseActivity {
                 dataPasien.setAlamat(viewHolder.etAlamat.getText().toString());
                 dataPasien.setHp(viewHolder.etHP.getText().toString());
                 dataPasien.setIbu(viewHolder.etNamaIbu.getText().toString());
-                if (viewHolder.rgJK.getCheckedRadioButtonId() == R.id.rg_JK_Laki){
-                    dataPasien.setJK("L");
-                }else if (viewHolder.rgJK.getCheckedRadioButtonId() == R.id.rg_JK_Perempuan){
-                    dataPasien.setJK("P");
+                switch (viewHolder.rgJK.getCheckedRadioButtonId()){
+                    case R.id.rg_JK_Laki:
+                        dataPasien.setJK("L");
+                        break;
+                    case R.id.rg_JK_Perempuan:
+                        dataPasien.setJK("P");
+                        break;
                 }
                 dataPasien.setRole("Pasien");
                 updateDataPasien(dataPasien);
@@ -109,7 +116,10 @@ public class DataPasienActivity extends BaseActivity {
     }
 
     private void initDataPasien(){
-        dataUser = SharedPreferenceUtils.getInstance(getApplicationContext()).getUserProfileValue();
+        if (user.getObject() != null)
+            dataUser = user;
+        else
+            return;
         viewHolder.etNamaPasien.setText(dataUser.getObject().getNama());
         viewHolder.etTTL.setText(dataUser.getObject().getTtl());
         viewHolder.etNIK.setText(dataUser.getObject().getNik());
@@ -117,10 +127,17 @@ public class DataPasienActivity extends BaseActivity {
         viewHolder.etAlamat.setText(dataUser.getObject().getAlamat());
         viewHolder.etHP.setText(dataUser.getObject().getHp());
         viewHolder.etNamaIbu.setText(dataUser.getObject().getIbu());
-        if (dataUser.getObject().getJK().equals("L")){
-            viewHolder.rgJK.check(R.id.rg_JK_Laki);
-        }else if(dataUser.getObject().equals("P")){
-            viewHolder.rgJK.check(R.id.rg_JK_Perempuan);
+        viewHolder.rgJK.clearCheck();
+        switch (dataUser.getObject().getJK()){
+            case "L":
+                viewHolder.rbLK.setChecked(true);
+                break;
+            case "P":
+                viewHolder.rbP.setChecked(true);
+                break;
+                default:
+                    viewHolder.rbLK.setChecked(true);
+                    break;
         }
     }
 

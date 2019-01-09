@@ -1,11 +1,42 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
     </style>
 
+    <!-- Text Input. -->
+    <style name="TextAppearance.Apps.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">@color/textColorPrimaryLight</item>
+    </style>
+
+    <style name="Widget.Apps.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextAppearance">@style/TextAppearance.Apps.TextInputLayout.HintText</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textColorHint">@color/textColorPrimaryLight</item>
+        <item name="passwordToggleTint">@color/colorPrimary</item>
+    </style>
+
+    <!-- Button. -->
+
+    <style name="Widget.Apps.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/textColorPrimaryLight</item>
+        <item name="backgroundTint">?attr/colorPrimaryDark</item>
+    </style>
+
+    <style name="Widget.Apps.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <!-- Toolbar. -->
+    <style name="Widget.Apps.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">?attr/colorAccent</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
 </resources>

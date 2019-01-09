@@ -1,5 +1,6 @@
 package com.example.pendaftaranonlinepasien;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
@@ -37,27 +38,37 @@ public class BaseActivity extends AppCompatActivity
 
     private ActionBarDrawerToggle drawerToggle;
     public RetrofitInterface retrofitInterface = RetrofitClient.getClient().create(RetrofitInterface.class);
+    protected UserObject<Pasien> user;
+    protected Context appContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        // Set up a Toolbar to replace ActionBar
+        appContext = getApplicationContext();
+        // TODO:: Set up a Toolbar to replace ActionBar
         setSupportActionBar(mToolbar);
-        // Setup Drawer View
+        // TODO:: Setup Drawer View
         //setupDrawerContent(nvDrawer);
         nvDrawer.setNavigationItemSelectedListener(this);
         drawerToggle = setupDrawerToggle();
-        // Tie DrawerLayout events to the ActionBarToggle
+        // TODO:: Tie DrawerLayout events to the ActionBarToggle
         mDrawer.addDrawerListener(drawerToggle);
-        /*Fragment fragment = new DaftarKontrolFragmen();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.flContent, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();*/
-        UserObject<Pasien> user = SharedPreferenceUtils.getInstance(getApplicationContext()).getUserProfileValue();
-        if (user.getObject().getRole().equals("Admin")){
-            Menu menu = nvDrawer.getMenu();
-            menu.setGroupVisible(R.id.AdminMenu, true);
+        // TODO:: Get SharedPreferences Profile
+        if (SharedPreferenceUtils.getInstance(appContext).getUserProfileValue() != null)
+            user = SharedPreferenceUtils.getInstance(appContext).getUserProfileValue();
+        // TODO:: Check Role
+        if (user.getObject() != null){
+            if (user.getObject().getRole().equals("Admin")){
+                Menu menu = nvDrawer.getMenu();
+                menu.setGroupVisible(R.id.AdminMenu, true);
+            }
+        }else{
+            if (user.getId()==1){
+                Menu menu = nvDrawer.getMenu();
+                menu.setGroupVisible(R.id.AdminMenu, true);
+            }
         }
     }
 
@@ -95,25 +106,25 @@ public class BaseActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_1) {
-           startActivity(new Intent(getApplicationContext(), DataPasienActivity.class));
+           startActivity(new Intent(appContext, DataPasienActivity.class));
         } else if (id == R.id.nav_2) {
-            startActivity(new Intent(getApplicationContext(), RiwayatPasienActivity.class));
+            startActivity(new Intent(appContext, RiwayatPasienActivity.class));
         } else if (id == R.id.nav_3) {
-                startActivity(new Intent(getApplicationContext(), DaftarKontrolActivity.class));
+                startActivity(new Intent(appContext, DaftarKontrolActivity.class));
         } else if(id == R.id.nav_4){
-            startActivity(new Intent(getApplicationContext(), ListPasienActivity.class));
+            startActivity(new Intent(appContext, ListPasienActivity.class));
         }
         else if (id == R.id.nav_logout){
             logout();
             finish();
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            startActivity(new Intent(appContext, LoginActivity.class));
         }
         mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     private void logout(){
-        SharedPreferenceUtils.getInstance(getApplicationContext()).clear();
+        SharedPreferenceUtils.getInstance(appContext).clear();
     }
 /*
     private void setupDrawerContent(NavigationView navigationView){

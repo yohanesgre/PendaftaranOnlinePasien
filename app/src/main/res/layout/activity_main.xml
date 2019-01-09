@@ -6,8 +6,8 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BaseActivity"
     android:fitsSystemWindows="true"
+    tools:context=".BaseActivity"
     tools:openDrawer="start">
 
     <!-- This LinearLayout represents the contents of the screen  -->
@@ -34,8 +34,11 @@
         android:id="@+id/nvView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@android:color/white"
+        android:layout_gravity="start|left"
+        android:backgroundTint="@color/colorAccent"
         app:menu="@menu/drawer_view"
-        app:headerLayout="@layout/nav_header"/>
+        app:headerLayout="@layout/nav_header"
+        app:itemTextColor="@color/textColorPrimary"
+        app:itemIconTint="@color/textColorPrimary"
+        app:itemBackground="@drawable/drawer_list_selector"/>
 </android.support.v4.widget.DrawerLayout>

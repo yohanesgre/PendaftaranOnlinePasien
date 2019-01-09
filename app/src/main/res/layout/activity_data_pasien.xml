@@ -19,7 +19,7 @@
             android:layout_marginTop="40dp"
             android:fontFamily="@font/open_sans_bold"
             android:text="Update Detail Pasien"
-            android:textSize="18sp"
+            android:textSize="25sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -31,7 +31,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="35dp"
             android:text="Nama Pasien: "
-            android:textSize="14sp"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@id/tvTitle"
             app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
@@ -43,8 +43,8 @@
             android:fontFamily="@font/open_sans"
             android:inputType="textPersonName"
             android:selectAllOnFocus="false"
-            android:singleLine="false"
-            android:textSize="12sp"
+            android:singleLine="true"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/tvNamaPasien"
             app:layout_constraintStart_toEndOf="@id/tvNamaPasien"
             app:layout_constraintTop_toTopOf="@+id/tvNamaPasien" />
@@ -56,19 +56,20 @@
             android:fontFamily="@font/open_sans_bold"
             android:layout_marginTop="35dp"
             android:text="Tanggal Lahir: "
-            android:textSize="14sp"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@id/tvNamaPasien"
             app:layout_constraintTop_toBottomOf="@id/tvNamaPasien" />
 
         <EditText
+            
             android:id="@+id/etTTL"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans"
             android:hint="dd/mm/yyyy"
             android:selectAllOnFocus="false"
-            android:singleLine="false"
-            android:textSize="12sp"
+            android:singleLine="true"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/tvTTL"
             app:layout_constraintStart_toStartOf="@id/etNamaPasien"
             app:layout_constraintTop_toTopOf="@+id/tvTTL" />
@@ -80,18 +81,19 @@
             android:fontFamily="@font/open_sans_bold"
             android:layout_marginTop="35dp"
             android:text="NIK: "
-            android:textSize="14sp"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@id/tvTTL"
             app:layout_constraintTop_toBottomOf="@id/tvTTL" />
 
         <EditText
+            
             android:id="@+id/etNIK"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans"
             android:selectAllOnFocus="false"
-            android:singleLine="false"
-            android:textSize="12sp"
+            android:singleLine="true"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/tvNIK"
             app:layout_constraintStart_toStartOf="@id/etNamaPasien"
             app:layout_constraintTop_toTopOf="@+id/tvNIK" />
@@ -103,7 +105,7 @@
             android:fontFamily="@font/open_sans_bold"
             android:layout_marginTop="35dp"
             android:text="Pekerjaan: "
-            android:textSize="14sp"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@id/tvNIK"
             app:layout_constraintTop_toBottomOf="@id/tvNIK" />
 
@@ -113,8 +115,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans"
             android:selectAllOnFocus="false"
-            android:singleLine="false"
-            android:textSize="12sp"
+            android:singleLine="true"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/tvKerja"
             app:layout_constraintStart_toStartOf="@id/etNamaPasien"
             app:layout_constraintTop_toTopOf="@+id/tvKerja" />
@@ -126,7 +128,7 @@
             android:fontFamily="@font/open_sans_bold"
             android:layout_marginTop="35dp"
             android:text="Alamat: "
-            android:textSize="14sp"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@id/tvKerja"
             app:layout_constraintTop_toBottomOf="@id/tvKerja" />
 
@@ -137,7 +139,7 @@
             android:fontFamily="@font/open_sans"
             android:selectAllOnFocus="false"
             android:singleLine="false"
-            android:textSize="12sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/tvAlamat"
             app:layout_constraintStart_toStartOf="@id/etNamaPasien"
             app:layout_constraintTop_toTopOf="@+id/tvAlamat" />
@@ -149,18 +151,19 @@
             android:fontFamily="@font/open_sans_bold"
             android:layout_marginTop="35dp"
             android:text="No. HP: "
-            android:textSize="14sp"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@id/tvAlamat"
             app:layout_constraintTop_toBottomOf="@id/tvAlamat" />
 
         <EditText
+            
             android:id="@+id/etHP"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans"
             android:selectAllOnFocus="false"
-            android:singleLine="false"
-            android:textSize="12sp"
+            android:singleLine="true"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/tvHP"
             app:layout_constraintStart_toStartOf="@id/etNamaPasien"
             app:layout_constraintTop_toTopOf="@+id/tvHP" />
@@ -172,18 +175,19 @@
             android:fontFamily="@font/open_sans_bold"
             android:layout_marginTop="35dp"
             android:text="Nama Ibu: "
-            android:textSize="14sp"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@id/tvHP"
             app:layout_constraintTop_toBottomOf="@id/tvHP" />
 
         <EditText
+            
             android:id="@+id/etNamaIbu"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans"
             android:selectAllOnFocus="false"
-            android:singleLine="false"
-            android:textSize="12sp"
+            android:singleLine="true"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/tvNamaIbu"
             app:layout_constraintStart_toStartOf="@id/etNamaPasien"
             app:layout_constraintTop_toTopOf="@+id/tvNamaIbu" />
@@ -195,7 +199,7 @@
             android:fontFamily="@font/open_sans_bold"
             android:layout_marginTop="35dp"
             android:text="Jenis Kelamin: "
-            android:textSize="14sp"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@id/tvNamaIbu"
             app:layout_constraintTop_toBottomOf="@id/tvNamaIbu" />
 
@@ -215,7 +219,7 @@
                     android:fontFamily="@font/open_sans"
                     android:paddingHorizontal="5dp"
                     android:text="Laki-Laki"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:checked="true"/>
                 <RadioButton
                     android:id="@+id/rg_JK_Perempuan"
@@ -224,7 +228,7 @@
                     android:fontFamily="@font/open_sans"
                     android:paddingHorizontal="5dp"
                     android:text="Perempuan"
-                    android:textSize="12sp" />
+                    android:textSize="15sp" />
         </RadioGroup>
 
         <Button
@@ -236,7 +240,7 @@
             android:layout_marginBottom="20dp"
             android:fontFamily="@font/open_sans"
             android:text="Update"
-            android:textSize="14sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintRight_toRightOf="parent"
