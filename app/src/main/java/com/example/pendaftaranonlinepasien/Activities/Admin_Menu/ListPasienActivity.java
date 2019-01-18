@@ -1,40 +1,32 @@
 package com.example.pendaftaranonlinepasien.Activities.Admin_Menu;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
+import com.evrencoskun.tableview.filter.Filter;
+import com.example.pendaftaranonlinepasien.API.POJO.Berobat;
 import com.example.pendaftaranonlinepasien.API.POJO.Pasien;
-import com.example.pendaftaranonlinepasien.API.POJO.UserObject;
-import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.RiwayatPasienActivity;
+import com.example.pendaftaranonlinepasien.API.POJO.UserBerobat;
+import com.example.pendaftaranonlinepasien.API.POJO.UserPasien;
 import com.example.pendaftaranonlinepasien.BaseActivity;
 import com.example.pendaftaranonlinepasien.R;
+import com.example.pendaftaranonlinepasien.TableView.TableViewAdapter;
+import com.example.pendaftaranonlinepasien.TableView.TableViewListener;
 import com.example.pendaftaranonlinepasien.TableView.TableViewModel;
 import com.example.pendaftaranonlinepasien.TableView.model.Cell;
 import com.example.pendaftaranonlinepasien.TableView.model.ColumnHeader;
 import com.example.pendaftaranonlinepasien.TableView.model.RowHeader;
-import com.example.pendaftaranonlinepasien.Utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +43,7 @@ public class ListPasienActivity extends BaseActivity {
 
     ContentViewHolder viewHolder;
 
-    List<DataTable> listDataTable = new ArrayList<>();
+    List<DataTableUser> listDataTableUser = new ArrayList<>();
     List<ColumnHeader> columnHeaderList = new ArrayList<>();
     List<RowHeader> rowHeaderList = new ArrayList<>();
     List<List<Cell>> cellList = new ArrayList<>();
@@ -63,11 +55,10 @@ public class ListPasienActivity extends BaseActivity {
         public ProgressBar progressBar;
         @BindView(R.id.tableView_ListPasien)
         TableView mTableView;
-        @BindView(R.id.btn_SearchPasien)
-        Button btnSearchPasien;
 
         private TableViewModel mTableViewModel;
         public AbstractTableAdapter mTableViewAdapter;
+        private Filter tableViewFilter;
 
         Unbinder unbinder;
         ContentViewHolder(View view){
@@ -76,109 +67,119 @@ public class ListPasienActivity extends BaseActivity {
         protected void unbindButterKnife(){
             unbinder.unbind();
         }
+
+        public void initializeTableView() {
+            // Create TableView View model class  to group view models of TableView
+            mTableViewModel = new TableViewModel(appContext);
+
+            // Create TableView Adapter
+            mTableViewAdapter = new TableViewAdapter(appContext, mTableViewModel);
+
+            mTableView.setAdapter(mTableViewAdapter);
+            mTableView.setTableViewListener(new TableViewListener(mTableView,(TableViewAdapter)mTableViewAdapter, 0));
+
+            // Load the dummy data to the TableView
+            mTableViewAdapter.setAllItems(columnHeaderList, rowHeaderList, cellList);
+            mTableView.setColumnWidth(0, 120);
+            mTableView.setColumnWidth(1, 120);
+            mTableView.setColumnWidth(2, 120);
+            mTableView.setColumnWidth(3, 120);
+
+            tableViewFilter = new Filter(mTableView);
+        }
+
+        public void filterTable(String filter_) {
+            // Sets a filter to the table, this will filter ALL the columns.
+            tableViewFilter.set(filter_);
+        }
     }
 
-    public class DataTable{
+    public class DataTableUser{
         int no;
-        String rm;
+        int noRM;
         String nama;
+        String nik;
 
-        DataTable(int no, String tgl, String poli){
+        public DataTableUser(int no, int noRM, String nama, String nik){
             this.no = no;
-            this.rm = tgl;
-            this.nama = poli;
+            this.noRM = noRM;
+            this.nama = nama;
+            this.nik= nik;
         }
+
         public int getNo() {
             return no;
         }
-        public String getRm() {
-            return rm;
+        public int getNoRM() {
+            return noRM;
         }
         public String getNama() {
             return nama;
         }
+        public String getNik() {
+            return nik;
+        }
     }
 
-    private void searchPasienByNIK(String nik){
-        Call<Pasien> call = retrofitInterface.SearchPasienByNIK(nik);
-        call.enqueue(new Callback<Pasien>() {
+    private void initDataTable(){
+        Call<ArrayList<UserPasien<Pasien>>> call = retrofitInterface.GetAllUser(api_token);
+        call.enqueue(new Callback<ArrayList<UserPasien<Pasien>>>() {
             @Override
-            public void onResponse(Call<Pasien> call, Response<Pasien> response) {
-                if (response.body()!=null){
-                    int idUser = response.body().getIdUser();
-                    Intent intent = new Intent(ListPasienActivity.this, RiwayatPasienActivity.class);
-                    intent.putExtra("Id", idUser);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Pasien> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /*private void initDataTable(){
-        Call<UserList<Riwayat>> call = retrofitInterface.getRiwayatPasien(SharedPreferenceUtils.getInstance(getApplicationContext()).getUserProfileValue().getId());
-        call.enqueue(new Callback<UserList<Riwayat>>() {
-            @Override
-            public void onResponse(Call<UserList<Riwayat>> call, Response<UserList<Riwayat>> response) {
-                if (response.body().getListObject()!=null){
-                    for (int i = 0; i < response.body().getListObject().size(); i++){
-                        Riwayat riwayatPasien = response.body().getListObject().get(i);
-                        String newTgl = DataFormatConverterUtils.getInstance(getBaseContext()).convertToFormated(riwayatPasien.getTgl());
-                        riwayatPasien.setTgl(newTgl);
-                        listDataTable.add(new DataTable(i + 1, riwayatPasien.getTgl().toString(), riwayatPasien.getPoli()));
+            public void onResponse(Call<ArrayList<UserPasien<Pasien>>> call, Response<ArrayList<UserPasien<Pasien>>> response) {
+                if (response.body().get(0).getObject()!=null){
+                    for (int i = 0; i < response.body().size(); i++){
+                        Pasien pasien = response.body().get(i).getObject();
+                        listDataTableUser.add(new DataTableUser(i + 1, pasien.getNorm(), pasien.getNama(), pasien.getNik()));
                     }
-                    if (listDataTable.size() > 0){
-                        rowHeaderList = TableViewModel.getRiwayatRowHeaderList(listDataTable);
-                        cellList = TableViewModel.getRiwayatCellList(listDataTable, columnHeaderList.size());
+                    if (listDataTableUser.size() > 0){
+                        rowHeaderList = TableViewModel.GetUserRowHeaderList(listDataTableUser);
+                        cellList = TableViewModel.GetUserCellList(listDataTableUser, columnHeaderList.size());
                         viewHolder.progressBar.setVisibility(View.GONE);
                         viewHolder.initializeTableView();
                     }
                 }
                 else {
-                    Toast.makeText(RiwayatPasienActivity.this, "Pasien belum pernah berobat!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(appContext, "Data pasien kosong!", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<UserList<Riwayat>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserPasien<Pasien>>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
-    }*/
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View contentView = getLayoutInflater().inflate(R.layout.activity_list_pasien, frameLayout, false);
+        View contentView = getLayoutInflater().inflate(R.layout.activity_admin_list_pasien, frameLayout, false);
         viewHolder = new ContentViewHolder(contentView);
         frameLayout.addView(contentView);
-        nvDrawer.setCheckedItem(R.id.nav_2);
-        //mToolbar.setTitle("Riwayat Pasien");
-        //viewHolder.progressBar.setVisibility(View.VISIBLE);
-        columnHeaderList = TableViewModel.getRiwayatColumnHeaderList();
-        viewHolder.btnSearchPasien.setOnClickListener(new View.OnClickListener(){
+        nvDrawer.setCheckedItem(R.id.nav_4);
+        this.setTitle("List Pasien");
+        viewHolder.progressBar.setVisibility(View.VISIBLE);
+        columnHeaderList = TableViewModel.GetUserColumnHeaderList();
+        viewHolder.etCariPasien.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                searchPasienByNIK(viewHolder.etCariPasien.getText().toString());
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String _s = "";
+                if(s.length()!=0)
+                    _s = s.toString();
+                viewHolder.filterTable(_s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
-        //initDataTable();
-    }
-    @Override
-    public void onBackPressed() {
-        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
-            mDrawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                finishAffinity();
-            } else {
-                super.onBackPressed();
-            }
-        }
+        initDataTable();
     }
 
     @Override

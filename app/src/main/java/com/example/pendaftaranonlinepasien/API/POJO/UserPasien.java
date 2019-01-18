@@ -7,19 +7,19 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class UserObject<T> {
+public class UserPasien<T> {
 
     @SerializedName("id")
     int id;
     @SerializedName("email")
     String email;
-    @SerializedName("password")
-    String password;
-    @SerializedName("createdAt")
-    String createdAt;
-    @SerializedName("updatedAt")
-    String updatedAt;
-    @SerializedName(value = "object", alternate = {"profile"})
+    @SerializedName("api_token")
+    String api_token;
+    @SerializedName("created_at")
+    String created_at;
+    @SerializedName("updated_at")
+    String updated_at;
+    @SerializedName(value = "profile", alternate = {"object"})
     T object;
 
 
@@ -34,21 +34,12 @@ public class UserObject<T> {
     public String getEmail() {
         return email;
     }
-    public String getPassword() {
-        return password;
-    }
-    public String getCreatedAt() {
-        return createdAt;
-    }
-    public String getUpdatedAt() {
-        return updatedAt;
+    public String getApi_token() {
+        return api_token;
     }
 
     // Setter Attribute
     public void setEmail(String email) {
         this.email = email;
-    }
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

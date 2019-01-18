@@ -20,7 +20,7 @@ public class RetrofitClient {
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .addInterceptor(interceptor).build();
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://welcometothebeginningofnothing.herokuapp.com")
+                .baseUrl("http://192.168.1.2:8080/lumenapi/public/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

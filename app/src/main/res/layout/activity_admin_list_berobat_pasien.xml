@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Data_Pasien.RiwayatPasienActivity"
     android:orientation="vertical">
     <LinearLayout
         android:id="@+id/header"
@@ -24,20 +23,19 @@
             android:paddingVertical="5dp">
 
             <TextView
+                android:textAppearance="@style/TextAppearance.Header.Title.2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:fontFamily="@font/open_sans"
-                android:text="No. RM: "
-                android:textSize="18sp" />
+                android:text="@string/tv_norm_list_berobat_pasien"
+                android:fontFamily="@font/open_sans_bold"/>
 
             <TextView
+                android:textAppearance="@style/TextAppearance.Header.Title.2"
                 android:id="@+id/tvNoRM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/open_sans"
-                android:text="test"
-                android:textSize="18sp" />
+                android:text="test" />
         </LinearLayout>
 
         <LinearLayout
@@ -47,37 +45,42 @@
             android:paddingHorizontal="10dp">
 
             <TextView
+                android:textAppearance="@style/TextAppearance.Header.Title.2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:fontFamily="@font/open_sans"
-                android:text="Nama Pasien: "
-                android:textSize="18sp" />
+                android:text="@string/tv_nama_list_berobat_pasien"
+                android:fontFamily="@font/open_sans_bold"/>
 
             <TextView
+                android:textAppearance="@style/TextAppearance.Header.Title.2"
                 android:id="@+id/tvNama"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/open_sans"
-                android:text="test"
-                android:textSize="18sp" />
+                android:text="test"/>
         </LinearLayout>
     </LinearLayout>
-        <ProgressBar
-            android:id="@+id/pBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:visibility="gone"/>
-
-        <com.evrencoskun.tableview.TableView
-            android:id="@+id/tableView_Riwayat"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center_horizontal"
-            android:layout_marginHorizontal="30dp"/>
+            android:layout_height="match_parent">
+            <com.evrencoskun.tableview.TableView
+                android:id="@+id/tableView_Riwayat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:layout_marginHorizontal="30dp"/>
+            <ProgressBar
+                android:id="@+id/pBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="150dp"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+        </RelativeLayout>
+    </ScrollView>
 </LinearLayout>

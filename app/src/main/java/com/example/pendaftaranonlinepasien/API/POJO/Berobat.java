@@ -2,26 +2,28 @@ package com.example.pendaftaranonlinepasien.API.POJO;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Riwayat {
+public class Berobat {
 
     @SerializedName("id")
     int id;
-    @SerializedName("id_user")
-    int id_user;
+    @SerializedName("user_id")
+    int user_id;
     @SerializedName("tgl")
     String tgl;
     @SerializedName("poli")
     String poli;
+    @SerializedName("dokter")
+    String dokter;
     @SerializedName("reservasi")
-    int reservasi;
+    String reservasi;
     @SerializedName("jam")
     String jam;
-    @SerializedName("nmr")
-    int nmr;
-    @SerializedName("createdAt")
-    String createdAt;
-    @SerializedName("updatedAt")
-    String updatedAt;
+    @SerializedName("penjamin")
+    String penjamin;
+    @SerializedName("created_at")
+    String created_at;
+    @SerializedName("updated_at")
+    String updated_at;
 
     /**
      * ======================= Setter =============================
@@ -30,7 +32,7 @@ public class Riwayat {
         return id;
     }
     public int getIdUser() {
-        return id_user;
+        return user_id;
     }
     public String getTgl() {
         return tgl;
@@ -38,14 +40,14 @@ public class Riwayat {
     public String getPoli() {
         return poli;
     }
-    public int getReservasi() {
+    public String getReservasi() {
         return reservasi;
     }
     public String getJam() {
         return jam;
     }
-    public int getNmr() {
-        return nmr;
+    public String getPenjamin() {
+        return penjamin;
     }
     /**
      * ==================== End of Setter ==========================
@@ -59,7 +61,7 @@ public class Riwayat {
         this.id = id;
     }
     public void setIdUser(int idUser) {
-        this.id_user = idUser;
+        this.user_id = idUser;
     }
     public void setTgl(String tgl) {
         this.tgl = tgl;
@@ -67,14 +69,17 @@ public class Riwayat {
     public void setPoli(String poli) {
         this.poli = poli;
     }
-    public void setReservasi(int reservasi) {
+    public void setReservasi(String reservasi) {
         this.reservasi = reservasi;
     }
     public void setJam(String jam) {
         this.jam = jam;
     }
-    public void setNmr(int nmr) {
-        this.nmr = nmr;
+    public void setDokter(String dokter) {
+        this.dokter = dokter;
+    }
+    public void setPenjamin(String penjamin) {
+        this.penjamin = penjamin;
     }
     /**
      * ==================== End of Getter ==========================

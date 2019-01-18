@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.pendaftaranonlinepasien.API.POJO.Pasien;
-import com.example.pendaftaranonlinepasien.API.POJO.UserObject;
+import com.example.pendaftaranonlinepasien.API.POJO.UserPasien;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -51,10 +51,10 @@ public class SharedPreferenceUtils {
         mSharedPreferencesEditor.putBoolean(key, value).commit();
     }
 
-    // Store UserObject profile
-    public void setValue(UserObject<Pasien> value){
+    // Store UserPasien profile
+    public void setValue(UserPasien<Pasien> value){
         String json = gson.toJson(value);
-        mSharedPreferencesEditor.putString("UserObject", json).commit();
+        mSharedPreferencesEditor.putString("UserPasien", json).commit();
     }
     /** ===================== End of Setter Value ====================== **/
 
@@ -72,9 +72,9 @@ public class SharedPreferenceUtils {
     public boolean getBooleanValue(String key, boolean deafultValue){
         return mSharedPreferences.getBoolean(key, deafultValue);
     }
-    // Get UserObject Pasien Profile
-    public UserObject getUserProfileValue(){
-        UserObject<Pasien> user = gson.fromJson(mSharedPreferences.getString("UserObject", ""), new TypeToken<UserObject<Pasien>>(){}.getType());
+    // Get UserPasien Pasien Profile
+    public UserPasien getUserProfileValue(){
+        UserPasien<Pasien> user = gson.fromJson(mSharedPreferences.getString("UserPasien", ""), new TypeToken<UserPasien<Pasien>>(){}.getType());
         return user;
     }
     /** ===================== End of Getter Value ====================== */

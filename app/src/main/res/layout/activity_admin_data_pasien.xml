@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".Activities.Data_Pasien.DataPasienActivity">
+    android:layout_height="wrap_content">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,29 +23,53 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:id="@+id/tvNamaPasien"
+            android:id="@+id/tvNoRM"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_bold"
             android:layout_marginStart="10dp"
             android:layout_marginTop="35dp"
-            android:text="Nama Pasien: "
+            android:text="No. RM: "
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@id/tvTitle"
             app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
         <EditText
-            android:id="@+id/etNamaPasien"
-            android:layout_width="180dp"
+            android:id="@+id/etNoRM"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:fontFamily="@font/open_sans"
+            android:selectAllOnFocus="false"
+            android:singleLine="true"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/tvNoRM"
+            app:layout_constraintStart_toEndOf="@id/tvNamaPasien"
+            app:layout_constraintTop_toTopOf="@+id/tvNoRM" />
+
+
+        <TextView
+            android:id="@+id/tvNamaPasien"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_bold"
+            android:layout_marginTop="35dp"
+            android:text="Nama Pasien: "
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/tvNoRM"
+            app:layout_constraintTop_toBottomOf="@id/tvNoRM" />
+
+        <EditText
+            android:id="@+id/etNamaPasien"
+            android:layout_width="180dp"
+            android:layout_height="49dp"
             android:fontFamily="@font/open_sans"
             android:inputType="textPersonName"
             android:selectAllOnFocus="false"
             android:singleLine="true"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/tvNamaPasien"
-            app:layout_constraintStart_toEndOf="@id/tvNamaPasien"
+            app:layout_constraintStart_toStartOf="@id/etNoRM"
             app:layout_constraintTop_toTopOf="@+id/tvNamaPasien" />
 
         <TextView
@@ -86,10 +109,10 @@
             app:layout_constraintTop_toBottomOf="@id/tvTTL" />
 
         <EditText
-            
+
             android:id="@+id/etNIK"
             android:layout_width="170dp"
-            android:layout_height="wrap_content"
+            android:layout_height="51dp"
             android:fontFamily="@font/open_sans"
             android:selectAllOnFocus="false"
             android:singleLine="true"
@@ -245,6 +268,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rg_JK" />
-
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

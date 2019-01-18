@@ -2,12 +2,16 @@ package com.example.pendaftaranonlinepasien.API.POJO;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Pasien{
+import java.io.Serializable;
+
+public class Pasien implements Serializable {
 
     @SerializedName("id")
     int id;
-    @SerializedName("id_user")
-    int id_user;
+    @SerializedName("user_id")
+    int user_id;
+    @SerializedName("norm")
+    int norm;
     @SerializedName("nama")
     String nama;
     @SerializedName("ttl")
@@ -26,16 +30,19 @@ public class Pasien{
     String ibu;
     @SerializedName("role")
     String role;
-    @SerializedName("createdAt")
-    String createdAt;
-    @SerializedName("updatedAt")
-    String updatedAt;
+    @SerializedName("created_at")
+    String created_at;
+    @SerializedName("updated_at")
+    String updated_at;
 
     /**
      * ======================= Setter =============================
      */
     public void setIdUser(int idUser) {
-        this.id_user = idUser;
+        this.user_id = idUser;
+    }
+    public void setNorm(int norm) {
+        this.norm = norm;
     }
     public void setNama(String nama) {
         this.nama = nama;
@@ -68,15 +75,14 @@ public class Pasien{
      * ==================== End of Setter ==========================
      */
 
-
-    /**
-     * ======================= Getter =============================
-     */
     public int getId() {
         return id;
     }
     public int getIdUser() {
-        return id_user;
+        return user_id;
+    }
+    public int getNorm() {
+        return norm;
     }
     public String getNama() {
         return nama;

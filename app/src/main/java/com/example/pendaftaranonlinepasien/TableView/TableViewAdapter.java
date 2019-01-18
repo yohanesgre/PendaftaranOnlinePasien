@@ -195,7 +195,7 @@ public class TableViewAdapter extends AbstractTableAdapter<ColumnHeader, RowHead
     public View onCreateCornerView() {
         // Get Corner xml layout
         View corner = mInflater.inflate(R.layout.table_view_corner_layout, null);
-        corner.setOnClickListener(new View.OnClickListener() {
+        /*corner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SortState sortState = TableViewAdapter.this.getTableView()
@@ -208,7 +208,7 @@ public class TableViewAdapter extends AbstractTableAdapter<ColumnHeader, RowHead
                     TableViewAdapter.this.getTableView().sortRowHeader(SortState.DESCENDING);
                 }
             }
-        });
+        });*/
         return corner;
     }
 

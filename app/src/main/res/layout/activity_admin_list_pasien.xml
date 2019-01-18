@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:textAppearance="@style/TextAppearance.Header.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_filter_table_list_pasien"
+        android:textColor="@null"
+        android:layout_marginLeft="15dp"
+        android:layout_marginVertical="10dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="40dp"
+            android:fontFamily="@font/open_sans"
+            android:hint="@string/filter_table_list_pasien"
+            style="@style/TextEdit.TextInputLayout.2"
+            android:textColorHint="@color/textColorHeaderDark">
+        <!--android:background="@drawable/edittextbackground"-->
+            <android.support.design.widget.TextInputEditText
+                android:textAppearance="@style/TextEdit.Text.2"
+                android:id="@+id/etCariPasien"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="7dp"
+                android:textSize="18dp"
+                android:textColor="@null"/>
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.evrencoskun.tableview.TableView
+                android:id="@+id/tableView_ListPasien"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:layout_marginHorizontal="30dp"/>
+            <ProgressBar
+                android:id="@+id/pBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="150dp"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

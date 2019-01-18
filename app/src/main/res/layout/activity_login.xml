@@ -16,13 +16,15 @@
 
         <!-- Email Label -->
         <android.support.design.widget.TextInputLayout
-            style="@style/Widget.Apps.TextInputLayout"
+            style="@style/TextEdit.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/hint_Email">
             <android.support.design.widget.TextInputEditText
+                android:textAppearance="@style/TextEdit.Text"
+                android:textColor="@null"
                 android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,7 +34,7 @@
 
         <!-- Password Label -->
         <android.support.design.widget.TextInputLayout
-            style="@style/Widget.Apps.TextInputLayout"
+            style="@style/TextEdit.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -40,7 +42,10 @@
             android:hint="@string/hint_Password"
             app:errorEnabled="true"
             app:passwordToggleEnabled="true">
-            <EditText android:id="@+id/input_password"
+            <EditText
+                android:textAppearance="@style/TextEdit.Text"
+                android:textColor="@null"
+                android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -60,7 +65,7 @@
             android:text="@string/str_btn_login"/>
 
         <TextView android:id="@+id/link_signup"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/textColorPrimaryLight"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"

@@ -22,10 +22,12 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".Activities.Data_Pasien.DataPasienActivity" />
-        <activity android:name=".Activities.Data_Pasien.RiwayatPasienActivity"></activity>
-        <activity android:name=".Activities.Pendaftaran_Pasien.DaftarKontrolActivity"></activity>
+        <activity android:name=".Activities.Data_Pasien.ListBerobatPasienActivity"></activity>
+        <activity android:name=".Activities.Pendaftaran_Pasien.DaftarBerobatActivity"></activity>
         <activity android:name=".Activities.Pendaftaran_Pasien.HasilReservasiActivity"></activity>
         <activity android:name=".Activities.Admin_Menu.ListPasienActivity"></activity>
+        <activity android:name=".Activities.Admin_Menu.AdminDataPasienActivity"></activity>
+        <activity android:name=".Activities.Admin_Menu.AdminListBerobatPasienActivity"></activity>
     </application>
 
 </manifest>

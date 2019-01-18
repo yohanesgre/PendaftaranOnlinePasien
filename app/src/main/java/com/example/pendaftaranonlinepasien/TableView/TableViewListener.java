@@ -18,15 +18,32 @@
 package com.example.pendaftaranonlinepasien.TableView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.listener.ITableViewListener;
+import com.example.pendaftaranonlinepasien.API.POJO.Berobat;
+import com.example.pendaftaranonlinepasien.API.POJO.Pasien;
+import com.example.pendaftaranonlinepasien.API.POJO.UserBerobat;
+import com.example.pendaftaranonlinepasien.API.RetrofitClient;
+import com.example.pendaftaranonlinepasien.API.RetrofitInterface;
+import com.example.pendaftaranonlinepasien.Activities.Admin_Menu.AdminListBerobatPasienActivity;
+import com.example.pendaftaranonlinepasien.Activities.Admin_Menu.ListPasienActivity;
+import com.example.pendaftaranonlinepasien.Activities.Pendaftaran_Pasien.HasilReservasiActivity;
 import com.example.pendaftaranonlinepasien.TableView.holder.ColumnHeaderViewHolder;
+import com.example.pendaftaranonlinepasien.TableView.model.Cell;
 import com.example.pendaftaranonlinepasien.TableView.popup.ColumnHeaderLongPressPopup;
 import com.example.pendaftaranonlinepasien.TableView.popup.RowHeaderLongPressPopup;
+import com.example.pendaftaranonlinepasien.Utils.SharedPreferenceUtils;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by evrencoskun on 21/09/2017.
@@ -37,8 +54,12 @@ public class TableViewListener implements ITableViewListener {
     private Toast mToast;
     private Context mContext;
     private TableView mTableView;
-
-    public TableViewListener(TableView tableView) {
+    private TableViewAdapter tableViewAdapter;
+    private int tableCategory;
+    public RetrofitInterface retrofitInterface = RetrofitClient.getClient().create(RetrofitInterface.class);
+    public TableViewListener(TableView tableView, TableViewAdapter tableViewAdapter, int tableCategory) {
+        this.tableCategory = tableCategory;
+        this.tableViewAdapter = tableViewAdapter;
         this.mContext = tableView.getContext();
         this.mTableView = tableView;
     }
@@ -52,10 +73,53 @@ public class TableViewListener implements ITableViewListener {
      */
     @Override
     public void onCellClicked(@NonNull RecyclerView.ViewHolder cellView, int column, int row) {
+        Cell model = tableViewAdapter.getCellItem(column, row);
+        if(tableCategory==0){
+            if(column==0){
+                Call<Pasien> call = retrofitInterface.GetUserByNoRM(SharedPreferenceUtils.getInstance(mContext).getStringValue("api_token", ""),
+                        Integer.parseInt(model.getData().toString()));
+                call.enqueue(new Callback<Pasien>() {
+                    @Override
+                    public void onResponse(Call<Pasien> call, Response<Pasien> response) {
+                        if(response.isSuccessful()){
+                            Pasien newPasien = response.body();
+                            Intent intent = new Intent(mContext, AdminListBerobatPasienActivity.class);
+                            intent.putExtra("Profile_Pasien", newPasien);
+                            mContext.startActivity(intent);
+                        }
+                    }
 
-        // Do what you want.
-        showToast("Cell " + column + " " + row + " has been clicked.");
+                    @Override
+                    public void onFailure(Call<Pasien> call, Throwable t) {
 
+                    }
+                });
+            }
+        }
+        if(tableCategory==1){
+            if(column==0){
+                Call<ArrayList<UserBerobat<Berobat>>> call = retrofitInterface.GetUserBerobatByReservasi(SharedPreferenceUtils.getInstance(mContext).getStringValue("api_token", ""),
+                        model.getData().toString());
+                call.enqueue(new Callback<ArrayList<UserBerobat<Berobat>>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<UserBerobat<Berobat>>> call, Response<ArrayList<UserBerobat<Berobat>>> response) {
+                        if(response.isSuccessful()){
+                            Intent intent = new Intent(mContext, HasilReservasiActivity.class);
+                            intent.putExtra("Reservasi", response.body().get(0).getListObject().get(0).getReservasi());
+                            intent.putExtra("Tanggal", response.body().get(0).getListObject().get(0).getTgl());
+                            intent.putExtra("Poli", response.body().get(0).getListObject().get(0).getPoli());
+                            intent.putExtra("Jam", response.body().get(0).getListObject().get(0).getJam());
+                            mContext.startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<UserBerobat<Berobat>>> call, Throwable t) {
+
+                    }
+                });
+            }
+        }
     }
 
     /**
@@ -69,7 +133,7 @@ public class TableViewListener implements ITableViewListener {
     public void onCellLongPressed(@NonNull RecyclerView.ViewHolder cellView, final int column,
                                   int row) {
         // Do What you want
-        showToast("Cell " + column + " " + row + " has been long pressed.");
+        //showToast("Cell " + column + " " + row + " has been long pressed.");
     }
 
     /**
@@ -82,7 +146,7 @@ public class TableViewListener implements ITableViewListener {
     public void onColumnHeaderClicked(@NonNull RecyclerView.ViewHolder columnHeaderView, int
             column) {
         // Do what you want.
-        showToast("Column header  " + column + " has been clicked.");
+        //showToast("Column header  " + column + " has been clicked.");
     }
 
     /**
@@ -113,9 +177,7 @@ public class TableViewListener implements ITableViewListener {
     @Override
     public void onRowHeaderClicked(@NonNull RecyclerView.ViewHolder rowHeaderView, int row) {
         // Do what you want.
-
-
-        showToast("Row header " + row + " has been clicked.");
+        //showToast("Row header " + row + " has been clicked.");
     }
 
     /**
@@ -127,12 +189,12 @@ public class TableViewListener implements ITableViewListener {
     @Override
     public void onRowHeaderLongPressed(@NonNull RecyclerView.ViewHolder rowHeaderView, int row) {
 
-        if (rowHeaderView != null) {
+        /*if (rowHeaderView != null) {
             // Create Long Press Popup
             RowHeaderLongPressPopup popup = new RowHeaderLongPressPopup(rowHeaderView, mTableView);
             // Show
             popup.show();
-        }
+        }*/
     }
 
 

@@ -3,8 +3,6 @@ package com.example.pendaftaranonlinepasien;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,15 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pendaftaranonlinepasien.API.POJO.Pasien;
-import com.example.pendaftaranonlinepasien.API.POJO.UserObject;
+import com.example.pendaftaranonlinepasien.API.POJO.UserPasien;
 import com.example.pendaftaranonlinepasien.API.RetrofitClient;
 import com.example.pendaftaranonlinepasien.API.RetrofitInterface;
-import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.RiwayatPasienActivity;
-import com.example.pendaftaranonlinepasien.Utils.DataFormatConverterUtils;
+import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.ListBerobatPasienActivity;
 import com.example.pendaftaranonlinepasien.Utils.SharedPreferenceUtils;
-import com.google.gson.Gson;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,33 +84,50 @@ public class LoginActivity extends AppCompatActivity {
         LoginRetrofit(email, password);
     }
 
-    public void LoginRetrofit(final String email, final String password){
-        Call<UserObject<Pasien>> call = retrofitInterface.loginAkun(email, password);
-        call.enqueue(new Callback<UserObject<Pasien>>() {
+    private void LoginRetrofit(final String email, final String password){
+        Call<UserPasien<Object>> call = retrofitInterface.loginAkun(email, password);
+        call.enqueue(new Callback<UserPasien<Object>>() {
             @Override
-            public void onResponse(Call<UserObject<Pasien>> call, Response<UserObject<Pasien>> response) {
+            public void onResponse(Call<UserPasien<Object>> call, Response<UserPasien<Object>> response) {
                 if (response.isSuccessful()) {
-                    SharedPreferenceUtils.getInstance(mContext).setValue(response.body());
-                    SharedPreferenceUtils.getInstance(mContext).setValue("Email", email);
-                    SharedPreferenceUtils.getInstance(mContext).setValue("Password", password);
-                    SharedPreferenceUtils.getInstance(mContext).setValue("Id", response.body().getId());
                     SharedPreferenceUtils.getInstance(mContext).setValue("Logined", true);
-                    if (response.body().getObject() != null) {
-                        SharedPreferenceUtils.getInstance(mContext).setValue("Role", response.body().getObject().getRole());
+                    SharedPreferenceUtils.getInstance(mContext).setValue("api_token", response.body().getApi_token());
+                    getProfile();
+                }
+            }
+            @Override
+            public void onFailure(Call<UserPasien<Object>> call, final Throwable t) {
+                Toast.makeText(LoginActivity.this, "1" + t.toString(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                btnLogin.setEnabled(true);
+            }
+        });
+    }
+
+    private void getProfile(){
+        Call<ArrayList<UserPasien<Pasien>>> call = retrofitInterface.getUserProfile(
+                SharedPreferenceUtils.getInstance(mContext).getStringValue("api_token", " ")
+        );
+        call.enqueue(new Callback<ArrayList<UserPasien<Pasien>>>() {
+            @Override
+            public void onResponse(Call<ArrayList<UserPasien<Pasien>>> call, Response<ArrayList<UserPasien<Pasien>>> response) {
+                if (response.isSuccessful()) {
+                    SharedPreferenceUtils.getInstance(mContext).setValue(response.body().get(0));
+                    if (response.body().get(0).getObject() != null){
+                        SharedPreferenceUtils.getInstance(mContext).setValue("User_Id", response.body().get(0).getObject().getIdUser());
+                        SharedPreferenceUtils.getInstance(mContext).setValue("Role", response.body().get(0).getObject().getRole());
                     }
                     progressDialog.dismiss();
                     btnLogin.setEnabled(true);
                     onLoginSuccess();
-                    Intent mAIntent = new Intent(LoginActivity.this, RiwayatPasienActivity.class);
+                    Intent mAIntent = new Intent(LoginActivity.this, ListBerobatPasienActivity.class);
                     startActivity(mAIntent);
                 }
             }
 
             @Override
-            public void onFailure(Call<UserObject<Pasien>> call, final Throwable t) {
-                logined = false;
-//                Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+            public void onFailure(Call<ArrayList<UserPasien<Pasien>>> call, Throwable t) {
+                Toast.makeText(getBaseContext(), "2"+ t.toString(), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
                 btnLogin.setEnabled(true);
             }

@@ -18,13 +18,13 @@
 package com.example.pendaftaranonlinepasien.TableView;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.RiwayatPasienActivity;
+import com.example.pendaftaranonlinepasien.Activities.Admin_Menu.ListPasienActivity;
+import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.ListBerobatPasienActivity;
 import com.example.pendaftaranonlinepasien.TableView.model.Cell;
 import com.example.pendaftaranonlinepasien.TableView.model.ColumnHeader;
 import com.example.pendaftaranonlinepasien.TableView.model.RowHeader;
+import com.example.pendaftaranonlinepasien.Utils.DataTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,27 +55,51 @@ public class TableViewModel {
         mContext = context;
     }
 
-    public static List<RowHeader> getRiwayatRowHeaderList(List<RiwayatPasienActivity.DataTable> dataTables) {
+    public static List<RowHeader> GetUserRowHeaderList(List<ListPasienActivity.DataTableUser> dataTables) {
         List<RowHeader> list = new ArrayList<>();
-        for (RiwayatPasienActivity.DataTable data : dataTables){
+        for (ListPasienActivity.DataTableUser data : dataTables){
             RowHeader header = new RowHeader(String.valueOf(data.getNo()), String.valueOf(data.getNo()));
             list.add(header);
         }
         return list;
     }
 
-    public static List<ColumnHeader> getRiwayatColumnHeaderList(){
+    public static List<RowHeader> GetBerobatRowHeaderList(List<DataTable> dataTables) {
+        List<RowHeader> list = new ArrayList<>();
+        for (DataTable data : dataTables){
+            RowHeader header = new RowHeader(String.valueOf(data.getNo()), String.valueOf(data.getNo()));
+            list.add(header);
+        }
+        return list;
+    }
+
+    public static List<ColumnHeader> GetUserColumnHeaderList(){
         List<ColumnHeader> list = new ArrayList<>();
 
-        ColumnHeader header = new ColumnHeader(String.valueOf(0), "Tanggal");
+        ColumnHeader header = new ColumnHeader(String.valueOf(0), "NoRM");
         list.add(header);
-        ColumnHeader header1 = new ColumnHeader(String.valueOf(1), "Poli");
+        ColumnHeader header1 = new ColumnHeader(String.valueOf(1), "Nama");
         list.add(header1);
+        ColumnHeader header2 = new ColumnHeader(String.valueOf(1), "NIK");
+        list.add(header2);
 
         return list;
     }
 
-    public static List<List<Cell>> getRiwayatCellList(List<RiwayatPasienActivity.DataTable> dataTables, int column_size) {
+    public static List<ColumnHeader> GetBerobatColumnHeaderList(){
+        List<ColumnHeader> list = new ArrayList<>();
+
+        ColumnHeader header1 = new ColumnHeader(String.valueOf(1), "Reservasi");
+        list.add(header1);
+        ColumnHeader header = new ColumnHeader(String.valueOf(0), "Tanggal");
+        list.add(header);
+        ColumnHeader header2 = new ColumnHeader(String.valueOf(1), "Poli");
+        list.add(header2);
+
+        return list;
+    }
+
+    public static List<List<Cell>> GetUserCellList(List<ListPasienActivity.DataTableUser> dataTables, int column_size) {
         List<List<Cell>> list = new ArrayList<>();
         for (int i = 0; i < dataTables.size(); i++) {
             List<Cell> cellList = new ArrayList<>();
@@ -83,9 +107,37 @@ public class TableViewModel {
                 Object data = null;
                 switch (j){
                     case 0:
-                        data = dataTables.get(i).getTgl();
+                        data = dataTables.get(i).getNoRM();
                         break;
                     case 1:
+                        data = dataTables.get(i).getNama();
+                        break;
+                    case 2:
+                        data = dataTables.get(i).getNik();
+                        break;
+                }
+                Cell cell = new Cell(String.valueOf(i), data);
+                cellList.add(cell);
+            }
+            list.add(cellList);
+        }
+        return list;
+    }
+
+    public static List<List<Cell>> GetBerobatCellList(List<DataTable> dataTables, int column_size) {
+        List<List<Cell>> list = new ArrayList<>();
+        for (int i = 0; i < dataTables.size(); i++) {
+            List<Cell> cellList = new ArrayList<>();
+            for (int j = 0; j < column_size; j++) {
+                Object data = null;
+                switch (j){
+                    case 0:
+                        data = dataTables.get(i).getReservasi();
+                        break;
+                    case 1:
+                        data = dataTables.get(i).getTgl();
+                        break;
+                    case 2:
                         data = dataTables.get(i).getPoli();
                         break;
                 }

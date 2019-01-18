@@ -10,16 +10,46 @@
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
     </style>
 
+    <!-- Text Header. -->
+
+    <style name="TextAppearance.Header.Title" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:textColor">@color/textColorHeaderDark</item>
+        <item name="android:textSize">25sp</item>
+        <item name="fontFamily">@font/open_sans_bold</item>
+    </style>
+
+    <style name="TextAppearance.Header.Title.2" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="android:textColor">@color/textColorHeaderDark</item>
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/open_sans</item>
+    </style>
+
     <!-- Text Input. -->
-    <style name="TextAppearance.Apps.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
+    <style name="TextEdit.Text" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/textColorPrimaryLight</item>
     </style>
 
-    <style name="Widget.Apps.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="hintTextAppearance">@style/TextAppearance.Apps.TextInputLayout.HintText</item>
+    <style name="TextEdit.Text.2" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/textColorHeaderDark</item>
+    </style>
+
+    <style name="TextEdit.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextAppearance">@style/TextEdit.TextInputLayout.HintText</item>
         <item name="android:paddingBottom">8dp</item>
-        <item name="android:textColorHint">@color/textColorPrimaryLight</item>
         <item name="passwordToggleTint">@color/colorPrimary</item>
+        <item name="android:textColorHint">@color/textColorPrimaryLight</item>
+    </style>
+
+    <style name="TextEdit.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">@color/textColorPrimaryLight</item>
+    </style>
+
+    <style name="TextEdit.TextInputLayout.2" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextAppearance">@style/TextEdit.TextInputLayout.HintText.2</item>
+    </style>
+
+    <style name="TextEdit.TextInputLayout.HintText.2" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">@color/textColorHeaderDark</item>
     </style>
 
     <!-- Button. -->

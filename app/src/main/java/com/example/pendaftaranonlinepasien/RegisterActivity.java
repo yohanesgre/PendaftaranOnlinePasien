@@ -2,7 +2,6 @@ package com.example.pendaftaranonlinepasien;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 
 import com.example.pendaftaranonlinepasien.API.RetrofitClient;
 import com.example.pendaftaranonlinepasien.API.RetrofitInterface;
-import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.RiwayatPasienActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     Button btnSignup;
     @BindView(R.id.link_login)
     TextView tvLogin;
-
+    ProgressDialog progressDialog;
     final RetrofitInterface retrofitInterface = RetrofitClient.getClient().create(RetrofitInterface.class);
     Context mContext;
     @Override
@@ -67,14 +65,15 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         btnSignup.setEnabled(true);
-        final ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this);
+        progressDialog = new ProgressDialog(RegisterActivity.this);
+        progressDialog.setMessage("Registering...");
         progressDialog.setIndeterminate(true);
         progressDialog.getWindow().setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL);
         progressDialog.setContentView(R.layout.progressbar_dialog);
         progressDialog.show();
 
         /*
-            Post UserObject Register to Server
+            Post UserPasien Register to Server
          */
         Call<ResponseBody> call = retrofitInterface.registerAkun(etEmail.getText().toString(), etPassword.getText().toString());
         call.enqueue(new Callback<ResponseBody>() {

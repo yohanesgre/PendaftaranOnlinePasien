@@ -3,6 +3,7 @@ package com.example.pendaftaranonlinepasien;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,15 +15,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.pendaftaranonlinepasien.API.POJO.Pasien;
-import com.example.pendaftaranonlinepasien.API.POJO.UserObject;
+import com.example.pendaftaranonlinepasien.API.POJO.UserPasien;
 import com.example.pendaftaranonlinepasien.API.RetrofitClient;
 import com.example.pendaftaranonlinepasien.API.RetrofitInterface;
 import com.example.pendaftaranonlinepasien.Activities.Admin_Menu.ListPasienActivity;
 import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.DataPasienActivity;
-import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.RiwayatPasienActivity;
-import com.example.pendaftaranonlinepasien.Activities.Pendaftaran_Pasien.DaftarKontrolActivity;
+import com.example.pendaftaranonlinepasien.Activities.Data_Pasien.ListBerobatPasienActivity;
+import com.example.pendaftaranonlinepasien.Activities.Pendaftaran_Pasien.DaftarBerobatActivity;
 import com.example.pendaftaranonlinepasien.Utils.SharedPreferenceUtils;
 
 import butterknife.BindView;
@@ -38,8 +40,9 @@ public class BaseActivity extends AppCompatActivity
 
     private ActionBarDrawerToggle drawerToggle;
     public RetrofitInterface retrofitInterface = RetrofitClient.getClient().create(RetrofitInterface.class);
-    protected UserObject<Pasien> user;
+    protected UserPasien<Pasien> user;
     protected Context appContext;
+    protected String api_token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class BaseActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         appContext = getApplicationContext();
+        api_token = SharedPreferenceUtils.getInstance(appContext).getStringValue("api_token", "");
         // TODO:: Set up a Toolbar to replace ActionBar
         setSupportActionBar(mToolbar);
         // TODO:: Setup Drawer View
@@ -108,9 +112,9 @@ public class BaseActivity extends AppCompatActivity
         if (id == R.id.nav_1) {
            startActivity(new Intent(appContext, DataPasienActivity.class));
         } else if (id == R.id.nav_2) {
-            startActivity(new Intent(appContext, RiwayatPasienActivity.class));
+            startActivity(new Intent(appContext, ListBerobatPasienActivity.class));
         } else if (id == R.id.nav_3) {
-                startActivity(new Intent(appContext, DaftarKontrolActivity.class));
+                startActivity(new Intent(appContext, DaftarBerobatActivity.class));
         } else if(id == R.id.nav_4){
             startActivity(new Intent(appContext, ListPasienActivity.class));
         }
@@ -126,6 +130,28 @@ public class BaseActivity extends AppCompatActivity
     private void logout(){
         SharedPreferenceUtils.getInstance(appContext).clear();
     }
+
+    private static long back_pressed;
+
+    @Override
+    public void onBackPressed()
+    {
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (back_pressed + 2000 > System.currentTimeMillis()){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    finish();
+                } else {
+                    super.onBackPressed();
+                }
+            }
+            else
+                Toast.makeText(getBaseContext(), "Press once again to exit!", Toast.LENGTH_SHORT).show();
+            back_pressed = System.currentTimeMillis();
+        }
+    }
+// see http://www.androidsnippets.com/double-back-press-to-exit
 /*
     private void setupDrawerContent(NavigationView navigationView){
         navigationView.setNavigationItemSelectedListener(

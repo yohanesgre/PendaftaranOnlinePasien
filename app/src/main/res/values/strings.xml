@@ -21,6 +21,12 @@
 
     <string name="penjamin_prompt">Pilih penjamin</string>
     <string name="poli_prompt">Pilih poli</string>
+    <string name="filter_table_list_pasien">No. RM/Nama/NIK</string>
+    <string name="tv_filter_table_list_pasien">Filter Pasien</string>
+    <string name="tv_norm_list_berobat_pasien">No. RM:</string>
+    <string name="tv_nama_list_berobat_pasien">Nama Pasien:</string>
+    <string name="tv_reservasi_hasil_reservasi">No. Reservasi</string>
+    <string name="tv_penjamin_hasil_reservasi">Penjamin</string>
 
     <string-array name="poli_arrays">
         <item>Poli Gigi</item>

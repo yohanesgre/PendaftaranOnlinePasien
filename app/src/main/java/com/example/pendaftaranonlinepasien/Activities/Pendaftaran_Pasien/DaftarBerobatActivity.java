@@ -1,12 +1,10 @@
 package com.example.pendaftaranonlinepasien.Activities.Pendaftaran_Pasien;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
 import android.text.InputType;
 import android.view.View;
@@ -17,31 +15,27 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.pendaftaranonlinepasien.API.POJO.Pasien;
-import com.example.pendaftaranonlinepasien.API.POJO.UserObject;
+import com.example.pendaftaranonlinepasien.API.POJO.Berobat;
+import com.example.pendaftaranonlinepasien.API.POJO.UserBerobat;
 import com.example.pendaftaranonlinepasien.BaseActivity;
 import com.example.pendaftaranonlinepasien.R;
 import com.example.pendaftaranonlinepasien.Utils.SharedPreferenceUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DaftarKontrolActivity extends BaseActivity {
+public class DaftarBerobatActivity extends BaseActivity {
 
     public static ContentViewHolder viewHolder;
-    UserObject<Pasien> user;
-
-    DialogFragment newFragment;
-    static String dateFull;
+    String dateFull;
 
     public class ContentViewHolder {
         @BindView(R.id.etNamaPasien)
@@ -70,13 +64,22 @@ public class DaftarKontrolActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View contentView = getLayoutInflater().inflate(R.layout.activity_daftar_kontrol, frameLayout, false);
+        View contentView = getLayoutInflater().inflate(R.layout.activity_daftar_berobat, frameLayout, false);
         viewHolder = new ContentViewHolder(contentView);
         frameLayout.addView(contentView);
         nvDrawer.setCheckedItem(R.id.nav_3);
-        //mToolbar.setTitle("Daftar Control");
-        newFragment = new DatePickerFragment();
-        user = SharedPreferenceUtils.getInstance(getApplicationContext()).getUserProfileValue();
+        this.setTitle("Daftar Berobat");
+        final Calendar newCalendar = Calendar.getInstance();
+        final SimpleDateFormat formatFull = new SimpleDateFormat("yyyyMMdd");
+        final DatePickerDialog  datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                viewHolder.etTanggalKontrol.setText(formatFull.format(newDate.getTime()));
+                dateFull = formatFull.format(newDate.getTime());
+            }
+
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         if (user.getObject()!=null){
             viewHolder.etNama.setText(user.getObject().getNama());
         } else {
@@ -86,7 +89,7 @@ public class DaftarKontrolActivity extends BaseActivity {
         viewHolder.etTanggalKontrol.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newFragment.show(getSupportFragmentManager(), "DatePicker");
+                datePickerDialog.show();
             }
         });
         viewHolder.etJam.setInputType(InputType.TYPE_NULL);
@@ -97,10 +100,10 @@ public class DaftarKontrolActivity extends BaseActivity {
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                 int minute = mcurrentTime.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(DaftarKontrolActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                mTimePicker = new TimePickerDialog(DaftarBerobatActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        viewHolder.etJam.setText( selectedHour + ":" + selectedMinute);
+                        viewHolder.etJam.setText( String.format("%02d:%02d", selectedHour, selectedMinute));
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
@@ -110,43 +113,39 @@ public class DaftarKontrolActivity extends BaseActivity {
         viewHolder.btnDaftar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                daftarKontrol();
-                Intent intent = new Intent(DaftarKontrolActivity.this, HasilReservasiActivity.class);
-                intent.putExtra("Tanggal", dateFull.toString());
-                intent.putExtra("Poli", viewHolder.spinnerPoli.getSelectedItem().toString());
-                intent.putExtra("Jam", viewHolder.etJam.getText().toString());
-                startActivity(intent);
+                Berobat berobat = new Berobat();
+                berobat.setTgl(viewHolder.etTanggalKontrol.getText().toString());
+                berobat.setPoli(viewHolder.spinnerPoli.getSelectedItem().toString());
+                berobat.setDokter("null");
+                berobat.setJam(viewHolder.etJam.getText().toString());
+                berobat.setPenjamin(viewHolder.spinnerPenjamin.getSelectedItem().toString());
+                daftarKontrol(berobat);
             }
         });
     }
 
-    private void daftarKontrol(){
-        Call<ResponseBody> call = retrofitInterface.DaftarBerobat(SharedPreferenceUtils.getInstance(getApplicationContext()).getUserProfileValue().getId(),
-                dateFull, viewHolder.spinnerPoli.getSelectedItem().toString(), "", viewHolder.etJam.getText().toString());
-        call.enqueue(new Callback<ResponseBody>() {
+    private void daftarKontrol(Berobat berobat){
+        Call<ArrayList<UserBerobat<Berobat>>> call = retrofitInterface.StoreUserBerobat(api_token, berobat);
+        call.enqueue(new Callback<ArrayList<UserBerobat<Berobat>>>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Toast.makeText(DaftarKontrolActivity.this, "Daftar kontrol berhasil!", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<ArrayList<UserBerobat<Berobat>>> call, Response<ArrayList<UserBerobat<Berobat>>> response) {
+                if (response.isSuccessful()){
+                    Toast.makeText(DaftarBerobatActivity.this, "Daftar kontrol berhasil!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(DaftarBerobatActivity.this, HasilReservasiActivity.class);
+                    intent.putExtra("Reservasi", response.body().get(0).getListObject().get(0).getReservasi());
+                    intent.putExtra("Tanggal", response.body().get(0).getListObject().get(0).getTgl());
+                    intent.putExtra("Poli", response.body().get(0).getListObject().get(0).getPoli());
+                    intent.putExtra("Jam", response.body().get(0).getListObject().get(0).getJam());
+                    startActivity(intent);
+                }
+
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserBerobat<Berobat>>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
-            mDrawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                finishAffinity();
-            } else {
-                super.onBackPressed();
-            }
-        }
     }
 
     @Override
@@ -154,47 +153,7 @@ public class DaftarKontrolActivity extends BaseActivity {
         viewHolder.unbindButterKnife();
         super.onDestroy();
     }
-
-    public static void setDateFull(String date){
-        dateFull = date;
-    }
-
-    /**
-     * TODO: Class DatePickerFragment
-     */
-    public static class DatePickerFragment extends DialogFragment {
-        final Calendar c = Calendar.getInstance();
-        String dateFull;
-        ContentViewHolder viewHolder;
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState){
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(), dateSetListener, year, month, day);
-            dialog.getDatePicker().setMinDate(c.getTimeInMillis());
-            return dialog;
-        }
-
-        private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                SimpleDateFormat formatFull = new SimpleDateFormat("yyyyMMdd");
-                SimpleDateFormat formatDay = new SimpleDateFormat("EEEE");
-                Date date = c.getTime();
-                String dateResult = formatFull.format(date);
-                String dayOfWeek = dayTranslate(formatDay.format(date));
-                dateFull = dateResult;
-                Toast.makeText(getActivity(), "selected date: " + dateFull,
-                        Toast.LENGTH_SHORT).show();
-                setDateFull(dateFull);
-                DaftarKontrolActivity.viewHolder.etTanggalKontrol.setText(dateFull);
-            }
-        };
-
-        private String dayTranslate(String day){
+    /*private String dayTranslate(String day){
             String result = null;
             switch (day){
                 case "Monday":
@@ -220,6 +179,5 @@ public class DaftarKontrolActivity extends BaseActivity {
                     break;
             }
             return result;
-        }
-    }
+     }*/
 }
